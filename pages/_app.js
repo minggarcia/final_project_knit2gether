@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
             box-sizing: border-box;
           }
           main {
-            margin: 0 10px;
+            margin: 0 50px;
           }
         `}
       />
