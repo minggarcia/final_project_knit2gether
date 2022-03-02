@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }) {
           body {
             margin: 0;
             box-sizing: border-box;
+            font-family: 'Syne', sans-serif;
           }
           main {
             margin: 0 50px;
