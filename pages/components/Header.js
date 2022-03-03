@@ -26,8 +26,18 @@ export default function Header() {
         </Link>
       </div>
       <Link href="/profile">
-        <a>Profile</a>
+        <button>
+          <a>Profile</a>
+        </button>
       </Link>
+      <div>
+        <Link href="/register">
+          <a>Register</a>
+        </Link>
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
+      </div>
     </header>
   );
 }
