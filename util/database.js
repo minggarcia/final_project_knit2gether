@@ -1,3 +1,4 @@
+import camelCaseKeys from 'camelcase-keys';
 import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 
@@ -11,4 +12,11 @@ export async function readUsers() {
 SELECT * FROM users
 `;
   return users;
+}
+
+export async function getSinglePost(id) {
+  const users = await sql`
+  SELECT * FROM users WHERE id=${id}
+  `;
+  return camelCaseKeys(users);
 }

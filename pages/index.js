@@ -15,8 +15,8 @@ export default function Home() {
         <Image
           alt="people making a knit project"
           src="/Knit_and_Crochet_Meetup.jpg"
-          width="1252"
-          height="351"
+          width="500"
+          height="300"
         />
         <h2>newest knitties from the community</h2>
       </Layout>

@@ -5,6 +5,11 @@ const headerStyle = css`
   display: flex;
   justify-content: space-between;
   margin: 0 50px;
+  color: #d7839b;
+  a {
+    color: #d7839b;
+    text-decoration: none;
+  }
 `;
 
 export default function Header() {
@@ -16,7 +21,9 @@ export default function Header() {
         </Link>
       </div>
       <div>
-        <p>knit2gether</p>
+        <Link href="/">
+          <a>knit2gether</a>
+        </Link>
       </div>
       <Link href="/profile">
         <a>Profile</a>
