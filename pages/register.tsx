@@ -6,12 +6,13 @@ import Layout from './components/Layout';
 
 const registrationLayout = css`
   display: flex;
+  justify-content: center;
 `;
 const registrationStyle = css`
   border: solid 4px #957666;
   border-radius: 66px;
   width: 543px;
-  height: 600px;
+  height: 650px;
   margin: 30px 50px;
   padding: 50px;
 `;
@@ -58,12 +59,13 @@ const imageStyleSection = css`
   span {
     color: #d7839b;
     font-weight: 800;
-    font-size: 30px;
-    border: red solid 1px;
+    font-size: 50px;
   }
-  Image {
-    border-radius: 5px;
-  }
+`;
+
+const imageStyle = css`
+  margin-top: 30px;
+  border-radius: 20px;
 `;
 
 export default function Register() {
@@ -119,8 +121,9 @@ export default function Register() {
       </div>
       <div css={imageStyleSection}>
         <span>knit2gether</span>
-        <div>
+        <div css={imageStyle}>
           <Image
+            css={imageStyle}
             alt="models posing with knitwear"
             src="/green.jpg"
             width="564"
