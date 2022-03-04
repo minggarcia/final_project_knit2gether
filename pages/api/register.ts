@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { createUser } from '../../util/database';
 
 export default async function registerHandler(
   request: NextApiRequest,
