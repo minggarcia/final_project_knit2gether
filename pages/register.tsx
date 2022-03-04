@@ -9,7 +9,7 @@ const registrationLayout = css`
   justify-content: center;
 `;
 const registrationStyle = css`
-  border: solid 4px #957666;
+  border: solid 10px #957666;
   border-radius: 66px;
   width: 543px;
   height: 650px;
@@ -119,6 +119,7 @@ export default function Register() {
           </form>
         </div>
       </div>
+
       <div css={imageStyleSection}>
         <span>knit2gether</span>
         <div css={imageStyle}>
