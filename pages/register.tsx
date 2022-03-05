@@ -92,7 +92,7 @@ export default function Register() {
           <form
             onSubmit={async (event) => {
               event.preventDefault();
-              const createUserResponse = await fetch('/api/register', {
+              const registerResponse = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -102,9 +102,9 @@ export default function Register() {
                   password: password,
                 }),
               });
-              const createUserResponseBody = await createUserResponse.json();
-              if ('errors' in createUserResponseBody) {
-                setErrors(createUserResponseBody.errors);
+              const registerResponseBody = await registerResponse.json();
+              if ('errors' in registerResponseBody) {
+                setErrors(registerResponseBody.errors);
                 return;
               }
 

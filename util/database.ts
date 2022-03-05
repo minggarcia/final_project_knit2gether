@@ -7,15 +7,6 @@ config();
 // CONNECT TO POSTGRESQL
 const sql = postgres();
 
-export type User = {
-  id: number;
-  username: string;
-};
-
-export type UserWithPasswordHash = User & {
-  passwordHash: string;
-};
-
 export async function readUsers() {
   const users = await sql`
 SELECT * FROM users
@@ -30,9 +21,39 @@ SELECT * FROM users
 //   return camelCaseKeys(users);
 // }
 
-export async function getUserByUsername(username: string) {
+export type User = {
+  id: number;
+  username: string;
+};
+
+export type UserWithPasswordHash = User & {
+  passwordHash: string;
+};
+
+export async function getUserById(id: number) {
   const [user] = await sql<[User | undefined]>`
+  SELECT
+   id, username
+   FROM
+   users
+   WHERE
+   id = ${id}`;
+  return user && camelCaseKeys(user);
+}
+
+export async function getUserByUsername(username: string) {
+  const [user] = await sql<[id: number | undefined]>`
   SELECT id FROM users WHERE username =${username}`;
+  return user && camelCaseKeys(user);
+}
+export async function getUserWithPasswordHashByUsername(username: string) {
+  const [user] = await sql<[UserWithPasswordHash | undefined]>`
+  SELECT
+   id, username, password_hash
+   FROM
+   users
+   WHERE
+   username =${username}`;
   return user && camelCaseKeys(user);
 }
 

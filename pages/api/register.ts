@@ -24,6 +24,7 @@ export default async function registerHandler(
       return;
     }
 
+    // If there is already a user  machting the username, return error message
     if (await getUserByUsername(request.body.username)) {
       response.status(409).json({
         errors: [{ message: '* sorry, username already exists' }],

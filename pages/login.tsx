@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { images } from '../next.config';
+import { LoginResponseBody } from './api/login';
 
 const loginLayout = css`
   display: flex;
@@ -92,9 +94,20 @@ const spanStyle = css`
   margin-top: 30px;
 `;
 
+type Errors = { message: string };
+
+// type Props = {
+//   refreshUserProfile: () => void;
+//   userObject: { username: string };
+//   csrfToken: string;
+// };
+
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<Errors>([]);
+  const router = useRouter();
+  const returnTo = router.query.returnTo;
   return (
     <div css={loginLayout}>
       <Head>
@@ -118,8 +131,42 @@ export default function Login() {
         <h1 css={h1Style}>Log In</h1>
         <div css={formStyle}>
           <form
-            onSubmit={(event) => {
+            onSubmit={async (event) => {
               event.preventDefault();
+
+              const loginResponse = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  username: username,
+                  password: password,
+                }),
+              });
+
+              const loginResponseBody =
+                (await loginResponse.json()) as LoginResponseBody;
+
+              if ('errors' in loginResponseBody) {
+                setErrors(loginResponseBody.errors);
+                return;
+              }
+
+              if (
+                returnTo &&
+                !Array.isArray(returnTo) &&
+                // match returnTo with valid path
+                /^\/[a-zA-Z0_9-?=]*$/.test(returnTo)
+              ) {
+                await router.push(returnTo);
+                return;
+              }
+
+              // when login worked it redirects to profile page
+              // (clears errors)
+              // setErrors([]);
+              await router.push(`/users/${loginResponseBody.user.id}`);
             }}
           />
           <div>
