@@ -12,29 +12,36 @@ export default async function registerHandler(
       typeof request.body.username !== 'string' ||
       !request.body.username ||
       typeof request.body.password !== 'string' ||
-      !request.body.password ||
-      typeof request.body.csrfToken !== 'string' ||
-      !request.body.csrfToken
+      !request.body.password
     ) {
       response.status(400).json({
-        errors:[
+        errors: [
           {
-            message: 'username, password or CSRF token not provides'
-          }
-        ]
+            message: '* username, password or CSRF token not provided',
+          },
+        ],
       });
       return;
- if (await getUserByUsername(request.body.username)){
+    }
 
+    if (await getUserByUsername(request.body.username)) {
+      response.status(409).json({
+        errors: [{ message: '* sorry, username already exists' }],
+      });
+      return; // IMPORTANT: will prevent 'Headers already sent' error
+    }
 
- response.status(409).json({
-  errors: [{ message: 'sorry, username is already taken' }],
-});
-return;
- }
-
-
-     const passwordHash = await bcrypt.hash(request.body.password, 12);
-
-    const user = createUser(request.body.username, passwordHash);
+    const passwordHash = await bcrypt.hash(request.body.password, 12);
+    const user = await createUser(request.body.username, passwordHash);
     response.status(201).json({ user: user });
+    return;
+  }
+
+  response.status(405).json({
+    errors: [
+      {
+        message: 'Method not supported, try POST instead',
+      },
+    ],
+  });
+}

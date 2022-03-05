@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createUser } from '../util/database';
 import Layout from './components/Layout';
@@ -69,6 +70,7 @@ const imageStyle = css`
   border-radius: 20px;
 `;
 const errorStyles = css`
+  margin-top: 20px;
   color: red;
 `;
 type Errors = { message: string };
@@ -77,6 +79,7 @@ export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
+  const router = useRouter();
   return (
     <div css={registrationLayout}>
       <Head>
@@ -105,7 +108,7 @@ export default function Register() {
                 return;
               }
 
-              // TODO REDIRECT TO PROFILEPAGE
+              await router.push('/');
             }}
           >
             <div>
@@ -117,14 +120,6 @@ export default function Register() {
               />
             </div>
 
-            <div css={errorStyles}>
-              {errors.map((error) => {
-                return (
-                  <div key={`error-${error.message}`}>{error.message}</div>
-                );
-              })}
-            </div>
-
             <div>
               {' '}
               <input
@@ -134,6 +129,13 @@ export default function Register() {
                 value={password}
                 onChange={(event) => setPassword(event.currentTarget.value)}
               />
+            </div>
+            <div css={errorStyles}>
+              {errors.map((error) => {
+                return (
+                  <div key={`error-${error.message}`}>{error.message}</div>
+                );
+              })}
             </div>
             <div>
               <button css={createAccountButton}>Create Account</button>
