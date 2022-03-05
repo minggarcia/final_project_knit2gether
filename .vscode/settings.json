@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["knitties"]
+  "cSpell.words": [
+    "knitties",
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGPORT",
+    "PGUSERNAME"
+  ]
 }

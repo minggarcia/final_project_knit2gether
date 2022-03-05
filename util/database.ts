@@ -30,6 +30,12 @@ SELECT * FROM users
 //   return camelCaseKeys(users);
 // }
 
+export async function getUserByUsername(username: string) {
+  const [user] = await sql<[User | undefined]>`
+  SELECT id FROM users WHERE username =${username}`;
+  return user && camelCaseKeys(user);
+}
+
 export async function createUser(username: string, passwordHash: string) {
   const [user] = await sql<[User]>`
 

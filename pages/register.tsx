@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
+import { createUser } from '../util/database';
 import Layout from './components/Layout';
 
 const registrationLayout = css`
@@ -67,10 +68,15 @@ const imageStyle = css`
   margin-top: 30px;
   border-radius: 20px;
 `;
+const errorStyles = css`
+  color: red;
+`;
+type Errors = { message: string };
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<Errors>([]);
   return (
     <div css={registrationLayout}>
       <Head>
@@ -81,9 +87,9 @@ export default function Register() {
         <h1 css={h1Style}>Registration</h1>
         <div css={formStyle}>
           <form
-            onSubmit={(event) => {
+            onSubmit={async (event) => {
               event.preventDefault();
-              fetch('/api/register', {
+              const createUserResponse = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -93,6 +99,13 @@ export default function Register() {
                   password: password,
                 }),
               });
+              const createUserResponseBody = await createUserResponse.json();
+              if ('errors' in createUserResponseBody) {
+                setErrors(createUserResponseBody.errors);
+                return;
+              }
+
+              // TODO REDIRECT TO PROFILEPAGE
             }}
           >
             <div>
@@ -103,6 +116,15 @@ export default function Register() {
                 onChange={(event) => setUsername(event.currentTarget.value)}
               />
             </div>
+
+            <div css={errorStyles}>
+              {errors.map((error) => {
+                return (
+                  <div key={`error-${error.message}`}>{error.message}</div>
+                );
+              })}
+            </div>
+
             <div>
               {' '}
               <input
