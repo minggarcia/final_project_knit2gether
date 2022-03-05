@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { images } from '../next.config';
 import { LoginResponseBody } from './api/login';
 
 const loginLayout = css`
@@ -64,7 +63,7 @@ const nextButton = css`
   font-size: 18px;
   border: transparent;
   align-self: right;
-  cursor: button;
+  cursor: pointer;
   margin-left: 130px;
 `;
 
@@ -93,21 +92,25 @@ const spanStyle = css`
   justify-content: center;
   margin-top: 30px;
 `;
+const errorStyles = css`
+  margin-top: 20px;
+  color: red;
+`;
 
 type Errors = { message: string };
 
-// type Props = {
-//   refreshUserProfile: () => void;
-//   userObject: { username: string };
-//   csrfToken: string;
-// };
+type Props = {
+  refreshUserProfile: () => void;
+  userObject: { username: string };
+  csrfToken: string;
+};
 
-export default function Login() {
+export default function Login(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
   const router = useRouter();
-  const returnTo = router.query.returnTo;
+
   return (
     <div css={loginLayout}>
       <Head>
@@ -153,6 +156,8 @@ export default function Login() {
                 return;
               }
 
+              const returnTo = router.query.returnTo;
+
               if (
                 returnTo &&
                 !Array.isArray(returnTo) &&
@@ -164,38 +169,46 @@ export default function Login() {
               }
 
               // when login worked it redirects to profile page
-              // (clears errors)
-              // setErrors([]);
+              // (clears errors) // setErrors([]);
+              props.refreshUserProfile();
               await router.push(`/users/${loginResponseBody.user.id}`);
             }}
-          />
-          <div>
-            <input
-              css={inputFieldStyle}
-              placeholder="enter your username"
-              value={username}
-              onChange={(event) => setUsername(event.currentTarget.value)}
-            />
-          </div>
-          <div>
-            <input
-              css={inputFieldStyle}
-              placeholder="enter your password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.currentTarget.value)}
-            />
-          </div>
-          <div>
-            <button css={nextButton}>
-              <Image
-                alt="arrow pointing to right"
-                src="/arrow.png"
-                width="40"
-                height="20"
+          >
+            <div>
+              <input
+                css={inputFieldStyle}
+                placeholder="enter your username"
+                value={username}
+                onChange={(event) => setUsername(event.currentTarget.value)}
               />
-            </button>
-          </div>
+            </div>
+            <div>
+              <input
+                css={inputFieldStyle}
+                placeholder="enter your password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+              />
+            </div>
+            <div css={errorStyles}>
+              {errors.map((error) => {
+                return (
+                  <div key={`error-${error.message}`}>{error.message}</div>
+                );
+              })}
+            </div>
+            <div>
+              <button css={nextButton}>
+                <Image
+                  alt="arrow pointing to right"
+                  src="/arrow.png"
+                  width="40"
+                  height="20"
+                />
+              </button>
+            </div>
+          </form>
           <div css={joinSectionStyle}>
             <button css={joinButton}>join the party</button>
           </div>
