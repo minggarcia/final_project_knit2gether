@@ -101,8 +101,8 @@ type Errors = { message: string };
 
 type Props = {
   refreshUserProfile: () => void;
-  userObject: { username: string };
-  csrfToken: string;
+  // userObject: { username: string };
+  // csrfToken: string;
 };
 
 export default function Login(props: Props) {
@@ -170,7 +170,7 @@ export default function Login(props: Props) {
 
               // when login worked it redirects to profile page
               // (clears errors) // setErrors([]);
-              props.refreshUserProfile();
+              // props.refreshUserProfile();
               await router.push(`/users/${loginResponseBody.user.id}`);
             }}
           >
