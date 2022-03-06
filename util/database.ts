@@ -30,6 +30,11 @@ export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
 
+type Session = {
+  id: number;
+  token: string;
+};
+
 export async function getUserById(id: number) {
   const [user] = await sql<[User | undefined]>`
   SELECT
@@ -68,4 +73,16 @@ export async function createUser(username: string, passwordHash: string) {
   id,
   username`;
   return camelCaseKeys(user);
+}
+
+export async function createSession(token: string, userId: number) {
+  const [session] = await sql<[Session]>`
+
+  INSERT INTO sessions
+  (token, user_id)
+  VALUES
+  (${token}, ${userId})
+  RETURNING
+  id, token`;
+  return camelCaseKeys(session);
 }
