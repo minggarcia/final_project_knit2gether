@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
+import Tokens from 'csrf';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { createCsrfToken } from '../util/auth';
 import { getValidSessionByToken } from '../util/database';
 import { LoginResponseBody } from './api/login';
 import Layout from './components/Layout';
@@ -106,7 +108,7 @@ type Errors = { message: string }[];
 type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
-  // csrfToken: string;
+  csrfToken: string;
 };
 
 export default function Login(props: Props) {
@@ -150,6 +152,7 @@ export default function Login(props: Props) {
                   body: JSON.stringify({
                     username: username,
                     password: password,
+                    csrfToken: props.csrfToken,
                   }),
                 });
 
@@ -230,6 +233,20 @@ export default function Login(props: Props) {
   );
 }
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // Redirect from HTTP to HTTPS on Heroku
+  if (
+    context.req.headers.host &&
+    context.req.headers['x-forwarded-proto'] &&
+    context.req.headers['x-forwarded-proto'] !== 'https'
+  ) {
+    return {
+      redirect: {
+        destination: `https://${context.req.headers.host}/login`,
+        permanent: true,
+      },
+    };
+  }
+
   // 1. check if there is a token and is valid from the cookie
   const token = context.req.cookies.sessionToken;
 
@@ -249,9 +266,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   // 3. Otherwise, generate CSRF token and render the page
+
   return {
     props: {
-      // csrfToken: createCsrfToken(),
+      csrfToken: createCsrfToken(),
     },
   };
 }

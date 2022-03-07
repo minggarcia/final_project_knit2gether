@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
-import { getUserById, User } from '../../util/database';
+import { getUserById, getValidSessionByToken, User } from '../../util/database';
 import Layout from '../components/Layout';
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   userObject: { username: string };
 };
 export default function UserProfile(props: Props) {
+  console.log(error);
   if (!props.user) {
     return (
       <Layout>
@@ -41,23 +42,16 @@ export default function UserProfile(props: Props) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user?: User }>> {
-  const userId = context.query.userId;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const sessionToken = context.req.cookies.sessionToken;
+  const session = await getValidSessionByToken(sessionToken);
 
   // User id is not correct type
-  if (!userId || Array.isArray(userId)) {
-    return { props: {} };
-  }
-
-  const user = await getUserById(parseInt(userId));
-
-  if (!user) {
-    context.res.statusCode = 404;
+  if (!session) {
     return {
-      // notFound: true, // also works, but generates a generic error page
-      props: {},
+      props: {
+        error: 'Oops something went wrong',
+      },
     };
   }
 

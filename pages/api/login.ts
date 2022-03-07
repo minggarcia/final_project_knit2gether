@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { verifyCsrfToken } from '../../util/auth';
 import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 import {
   createSession,
@@ -11,14 +12,19 @@ import {
 type LoginRequestBody = {
   username: string;
   password: string;
+  csrfToken: string;
 };
 
 export type LoginResponseBody =
   | { errors: { message: string }[] }
   | { user: Pick<User, 'id'> };
 
+type LoginNextApiRequest = Omit<NextApiRequest, 'body'> & {
+  body: LoginRequestBody;
+};
+
 export default async function loginHandler(
-  request: NextApiRequest,
+  request: LoginNextApiRequest,
   response: NextApiResponse<LoginResponseBody>,
 ) {
   if (request.method === 'POST') {
@@ -26,7 +32,9 @@ export default async function loginHandler(
       typeof request.body.username !== 'string' ||
       !request.body.username ||
       typeof request.body.password !== 'string' ||
-      !request.body.password
+      !request.body.password ||
+      typeof request.body.csrfToken !== 'string' ||
+      !request.body.csrfToken
     ) {
       response.status(400).json({
         errors: [
@@ -39,18 +47,18 @@ export default async function loginHandler(
     }
 
     // Verify CSRF Token
-    //  const csrfTokenMatches = verifyCsrfToken(request.body.csrfToken);
+    const csrfTokenMatches = verifyCsrfToken(request.body.csrfToken);
 
-    //  if (!csrfTokenMatches) {
-    //    response.status(403).json({
-    //      errors: [
-    //        {
-    //          message: 'Invalid CSRF token',
-    //        },
-    //      ],
-    //    });
-    //    return; // Important: will prevent "Headers already sent" error
-    //  }
+    if (!csrfTokenMatches) {
+      response.status(403).json({
+        errors: [
+          {
+            message: 'Invalid CSRF token',
+          },
+        ],
+      });
+      return; // Important: will prevent "Headers already sent" error
+    }
 
     const userWithPasswordHash = await getUserWithPasswordHashByUsername(
       request.body.username,
@@ -85,10 +93,10 @@ export default async function loginHandler(
 
     //  RETURN CREATED SESSION IN COOKIE
     // 1. Create a unique token
-    const token = crypto.randomBytes(64).toString('base64');
+    const sessionToken = crypto.randomBytes(64).toString('base64');
 
     // 2. Create the session
-    const session = await createSession(token, userWithPasswordHash.id);
+    const session = await createSession(sessionToken, userWithPasswordHash.id);
 
     // 3. Serialize the cookie
     const serializedCookie = await createSerializedRegisterSessionTokenCookie(

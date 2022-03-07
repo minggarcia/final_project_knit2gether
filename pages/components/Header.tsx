@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import Link from 'next/link';
+import { User } from '../../util/database';
 
 const headerStyle = css`
   display: flex;
   justify-content: space-between;
-  margin: 0 50px;
+  margin: 20px 30px;
   color: #d7839b;
   font-size: 20px;
   font-weight: bold;
@@ -58,7 +59,7 @@ const headerStyle = css`
 // `;
 
 const underHeaderContent = css`
-  justify-content: center;
+  justify-content: right;
   display: flex;
   gap: 80px;
   align-items: center;
@@ -72,40 +73,36 @@ const underHeaderContent = css`
   border-bottom: solid 3px #e4deca;
   margin: 10px;
 `;
-
-export default function Header(props) {
+type Props = {
+  userObject?: User;
+};
+export default function Header(props: Props) {
   return (
     <header>
       <div css={headerStyle}>
-        <div>
-          <Link href="/">
-            <a>Logo</a>
-          </Link>
-        </div>
-        <div>
-          <Link href="/">
-            <a>knit2gether</a>
-          </Link>
-        </div>
-        <div>
-          <Link href="/logout">
-            <a>Logout</a>
-          </Link>
-        </div>
+        {/* <Link href="/">
+          <a>Logo</a>
+        </Link> */}
+        <Link href="/">
+          <a>knit2gether</a>
+        </Link>
+        {props.userObject && <div>hi bestie, {props.userObject.username}</div>}{' '}
       </div>
 
       <div css={underHeaderContent}>
-        <div>{props.userObject && <div>{props.userObject.username}</div>} </div>
-        <Link href="/">
-          <a>P</a>
-        </Link>
         <div>
-          <Link href="/register">
-            <a>Register</a>
-          </Link>
-          <Link href="/login">
-            <a>Login</a>
-          </Link>
+          {props.userObject ? (
+            <a href="/logout">Logout</a>
+          ) : (
+            <>
+              <Link href="/register">
+                <a>Register</a>
+              </Link>
+              <Link href="/login">
+                <a>Login</a>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

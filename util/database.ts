@@ -47,18 +47,20 @@ export async function getUserById(id: number) {
   return user && camelCaseKeys(user);
 }
 
-export async function getUserBySessionToken(token: string | undefined) {
+export async function getUserByValidSessionToken(token: string | undefined) {
   if (!token) return undefined;
-
   const [user] = await sql<[User | undefined]>`
     SELECT
-      users.id ,
+      users.id,
       users.username
     FROM
-       users, sessions
+      users,
+      sessions
     WHERE
-        sessions.token = ${token} AND
-        sessions.user_id = users.id`;
+      sessions.token = ${token} AND
+      sessions.user_id = users.id AND
+      sessions.expiry_timestamp > now()
+  `;
   return user && camelCaseKeys(user);
 }
 
@@ -142,21 +144,4 @@ export async function getValidSessionByToken(token: string | undefined) {
   await deleteExpiredSessions();
 
   return session && camelCaseKeys(session);
-}
-
-export async function getUserByValidSessionToken(token: string | undefined) {
-  if (!token) return undefined;
-  const [user] = await sql<[User | undefined]>`
-    SELECT
-      users.id,
-      users.username
-    FROM
-      users,
-      sessions
-    WHERE
-      sessions.token = ${token} AND
-      sessions.user_id = users.id AND
-      sessions.expiry_timestamp > now()
-  `;
-  return user && camelCaseKeys(user);
 }
