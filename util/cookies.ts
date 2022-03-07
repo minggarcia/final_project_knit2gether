@@ -7,7 +7,7 @@ export function createSerializedRegisterSessionTokenCookie(token: string) {
   const maxAge = 60 * 10; // 10 minutes
   return serialize('sessionToken', token, {
     // IMPORTANT FOR SECURITY
-    magAge: maxAge,
+    maxAge: maxAge,
     expires: new Date(Date.now() + maxAge * 1000),
     httpOnly: true,
     secure: isProduction,

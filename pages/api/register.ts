@@ -1,16 +1,11 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 import {
   createSession,
   createUser,
   getUserByUsername,
-  getValidSessionByToken,
 } from '../../util/database';
 
 export default async function registerHandler(
@@ -34,7 +29,7 @@ export default async function registerHandler(
       return;
     }
 
-    // If there is already a user  machting the username, return error message
+    // If there is already a user  matching the username, return error message
     if (await getUserByUsername(request.body.username)) {
       response.status(409).json({
         errors: [{ message: '* sorry, username already exists' }],
