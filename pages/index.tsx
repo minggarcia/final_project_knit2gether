@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { getUserByValidSessionToken } from '../util/database';
 import Layout from './components/Layout';
 
 const homepageStyle = css`
@@ -58,4 +59,25 @@ export default function Home(props: Props) {
       </Layout>
     </div>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // 1. Get a user from the cookie sessionToken
+  const token = context.req.cookies.sessionToken;
+  const user = await getUserByValidSessionToken(token);
+
+  // 2. If there is a user, return that and render page
+  if (user) {
+    return {
+      props: { user: user },
+    };
+  }
+
+  // 3. Otherwise redirect to login
+  return {
+    redirect: {
+      destination: `/login?returnTo=/`,
+      permanent: false,
+    },
+  };
 }

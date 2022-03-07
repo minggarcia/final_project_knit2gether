@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { getValidSessionByToken } from '../util/database';
@@ -215,7 +216,11 @@ export default function Login(props: Props) {
               </div>
             </form>
             <div css={joinSectionStyle}>
-              <button css={joinButton}>join the party</button>
+              <Link href="/register">
+                <a>
+                  <button css={joinButton}>join the party</button>
+                </a>
+              </Link>
             </div>
             <span css={spanStyle}>show off your knits and register now!</span>
           </div>

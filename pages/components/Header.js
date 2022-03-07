@@ -96,7 +96,7 @@ export default function Header(props) {
 
       <div css={underHeaderContent}>
         <div>{props.userObject && <div>{props.userObject.username}</div>} </div>
-        <Link href="./users/ userId">
+        <Link href="/">
           <a>P</a>
         </Link>
         <div>
