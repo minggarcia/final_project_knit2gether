@@ -74,7 +74,8 @@ const errorStyles = css`
   margin-top: 20px;
   color: red;
 `;
-type Errors = { message: string };
+
+type Errors = { message: string }[];
 type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
