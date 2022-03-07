@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import Layout from './components/Layout';
 
 const homepageStyle = css`
@@ -27,11 +28,14 @@ const newKnitsSection = css`
     color: #779677;
   }
 `;
+type Props = {
+  userObject: { username: string };
+};
 
-export default function Home() {
+export default function Home(props: Props) {
   return (
     <div>
-      <Layout>
+      <Layout userObject={props.userObject}>
         <Head>
           <title>Home</title>
 

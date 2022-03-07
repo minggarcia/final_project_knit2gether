@@ -33,6 +33,7 @@ export type UserWithPasswordHash = User & {
 type Session = {
   id: number;
   token: string;
+  userId: number;
 };
 
 export async function getUserById(id: number) {
@@ -84,5 +85,63 @@ export async function createSession(token: string, userId: number) {
   (${token}, ${userId})
   RETURNING
   id, token`;
+
+  await deleteExpiredSessions();
   return camelCaseKeys(session);
+}
+
+export async function deleteSessionByToken(token: string) {
+  const [session] = await sql<[Session | undefined]>`
+    DELETE FROM
+      sessions
+    WHERE
+      token = ${token}
+    RETURNING *
+  `;
+  return session && camelCaseKeys(session);
+}
+
+export async function deleteExpiredSessions() {
+  const sessions = await sql<Session[]>`
+  DELETE FROM
+    sessions
+  WHERE
+    expiry_timestamp < NOW()
+    RETURNING *`;
+
+  return sessions.map((session) => camelCaseKeys(session));
+}
+
+export async function getValidSessionByToken(token: string | undefined) {
+  if (!token) return undefined;
+  const [session] = await sql<[Session | undefined]>`
+    SELECT
+      *
+    FROM
+      sessions
+    WHERE
+      token = ${token} AND
+      expiry_timestamp > now()
+  `;
+
+  await deleteExpiredSessions();
+
+  return session && camelCaseKeys(session);
+}
+
+export async function getUserByValidSessionToken(token: string | undefined) {
+  if (!token) return undefined;
+  const [user] = await sql<[User | undefined]>`
+    SELECT
+      users.id,
+      users.username
+    FROM
+      users,
+      sessions
+    WHERE
+      sessions.token = ${token} AND
+      sessions.user_id = users.id AND
+      sessions.expiry_timestamp > now()
+  `;
+  return user && camelCaseKeys(user);
 }

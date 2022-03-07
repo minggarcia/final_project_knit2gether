@@ -1,11 +1,16 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
-import { NextApiRequest, NextApiResponse } from 'next';
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
 import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 import {
   createSession,
   createUser,
   getUserByUsername,
+  getValidSessionByToken,
 } from '../../util/database';
 
 export default async function registerHandler(
