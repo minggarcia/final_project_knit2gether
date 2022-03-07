@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { createCsrfToken } from '../util/auth';
 import { getValidSessionByToken } from '../util/database';
 import Layout from './components/Layout';
 
@@ -79,7 +80,7 @@ type Errors = { message: string }[];
 type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
-  // csrfToken: string;
+  csrfToken: string;
 };
 
 export default function Register(props: Props) {
@@ -108,6 +109,7 @@ export default function Register(props: Props) {
                   body: JSON.stringify({
                     username: username,
                     password: password,
+                    csrfToken: props.csrfToken,
                   }),
                 });
                 const registerResponseBody = await registerResponse.json();
@@ -205,7 +207,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // 3. Otherwise, generate CSRF token and render the page
   return {
     props: {
-      // csrfToken: createCsrfToken(),
+      csrfToken: createCsrfToken(),
     },
   };
 }
