@@ -37,6 +37,7 @@ const loginStyle = css`
   height: 650px;
   margin: 30px 50px;
   padding: 50px;
+  box-shadow: 5px 10px 20px #957666;
 `;
 const h1Style = css`
   color: #779677;
@@ -48,6 +49,10 @@ const formStyle = css`
   display: flex;
   flex-direction: column;
   margin-top: 80px;
+
+  input:focus {
+    border: 2px solid #779677;
+  }
 `;
 const inputFieldStyle = css`
   background: #e4deca;
@@ -56,6 +61,9 @@ const inputFieldStyle = css`
   margin-top: 30px;
   width: 240px;
   border: transparent;
+  :focus {
+    border: #779677 solid 2px;
+  }
 `;
 
 const nextButton = css`
@@ -86,7 +94,7 @@ const joinButton = css`
 `;
 
 const joinSectionStyle = css`
-  margin-top: 80px;
+  margin-top: 120px;
   display: flex;
   gap: 20px;
   p {
@@ -95,14 +103,10 @@ const joinSectionStyle = css`
   }
 `;
 
-const spanStyle = css`
-  font-size: 18px;
-  justify-content: center;
-  margin-top: 30px;
-`;
 const errorStyles = css`
-  margin-top: 20px;
   color: red;
+  display: flex;
+  justify-content: center;
 `;
 
 type Errors = { message: string }[];
@@ -138,7 +142,7 @@ export default function Login(props: Props) {
       </div>
 
       <div css={loginStyle}>
-        <h1 css={h1Style}>Log In</h1>
+        <h1 css={h1Style}>Log In</h1>{' '}
         <div css={formStyle}>
           <form
             onSubmit={async (event) => {
@@ -183,6 +187,13 @@ export default function Login(props: Props) {
               await router.push(`/users/${loginResponseBody.user.id}`);
             }}
           >
+            <div css={errorStyles}>
+              {errors.map((error) => {
+                return (
+                  <div key={`error-${error.message}`}>{error.message}</div>
+                );
+              })}
+            </div>
             <div>
               <input
                 css={inputFieldStyle}
@@ -200,13 +211,7 @@ export default function Login(props: Props) {
                 onChange={(event) => setPassword(event.currentTarget.value)}
               />
             </div>
-            <div css={errorStyles}>
-              {errors.map((error) => {
-                return (
-                  <div key={`error-${error.message}`}>{error.message}</div>
-                );
-              })}
-            </div>
+
             <div>
               <button css={nextButton}>
                 <Image

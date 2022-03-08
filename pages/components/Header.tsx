@@ -4,13 +4,17 @@ import Link from 'next/link';
 import { User } from '../../util/database';
 
 const headerStyle = css`
+  display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 10px 10px;
   color: #d7839b;
   font-size: 20px;
   font-weight: bold;
-  display: flex;
+  border: solid 4px #779677;
+  border-radius: 20px;
+  padding: 20px 10px;
+
   cursor: pointer;
   a {
     color: #d7839b;
@@ -80,17 +84,18 @@ export default function Header(props: Props) {
   return (
     <header>
       <div css={headerStyle}>
-        {/* <Link href="/">
-          <a>Logo</a>
-        </Link> */}{' '}
-        <Image src="/logo-pink.png" width="40px" height="40px" />
         <Link href="/">
           <a>knit2gether</a>
         </Link>
-        {props.userObject && <div>hi bestie, {props.userObject.username}</div>}{' '}
+        {props.userObject && (
+          <div>
+            hi bestie, {''}
+            {props.userObject.username}
+          </div>
+        )}{' '}
       </div>
 
-      <div css={underHeaderContent}>
+      <div>
         <div>
           {props.userObject ? (
             <Link href="/logout">

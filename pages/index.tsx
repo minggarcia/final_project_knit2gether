@@ -13,12 +13,21 @@ const homepageStyle = css`
 
 const imageStyle = css`
   border-radius: 50px;
+  justify-content: center;
 `;
 
-const imageSection = css`
+const welcomeSectionStyle = css`
   margin-top: 30px;
   justify-content: center;
   display: flex;
+  color: #d7839b;
+  gap: 20px;
+`;
+
+const imageSectionStyle = css`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 `;
 
 const newKnitsSection = css`
@@ -43,14 +52,19 @@ export default function Home(props: Props) {
           <meta name="Homepage" content="Homepage" />
         </Head>
         <div css={homepageStyle}>
-          <div css={imageSection}>
-            {/* <Image
+          <div css={welcomeSectionStyle}>
+            <h1>Welcome to knit2gether</h1>
+            <Image src="/logo-pink.png" width="80px" height="30px" />
+          </div>
+
+          <div css={imageSectionStyle}>
+            <Image
               css={imageStyle}
-              alt="people making a knit project"
-              src="/Knit_and_Crochet_Meetup.jpg"
-              width="900"
-              height="456"
-            /> */}
+              alt="knitting material laid out on a pink surface"
+              src="/knit banner.jpeg"
+              width="1286"
+              height="340"
+            />
           </div>
           <div css={newKnitsSection}>
             <h2>newest knitties from the community</h2>

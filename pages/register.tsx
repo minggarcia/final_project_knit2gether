@@ -19,6 +19,7 @@ const registrationStyle = css`
   height: 650px;
   margin: 30px 50px;
   padding: 50px;
+  box-shadow: 5px 10px 20px #957666;
 `;
 
 const h1Style = css`
