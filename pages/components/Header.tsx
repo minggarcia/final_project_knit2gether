@@ -1,14 +1,16 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { User } from '../../util/database';
 
 const headerStyle = css`
-  display: flex;
   justify-content: space-between;
-  margin: 20px 30px;
+  align-items: center;
+  margin: 10px 10px;
   color: #d7839b;
   font-size: 20px;
   font-weight: bold;
+  display: flex;
   cursor: pointer;
   a {
     color: #d7839b;
@@ -61,8 +63,6 @@ const headerStyle = css`
 const underHeaderContent = css`
   justify-content: right;
   display: flex;
-  gap: 80px;
-  align-items: center;
 
   a {
     color: #779677;
@@ -82,7 +82,8 @@ export default function Header(props: Props) {
       <div css={headerStyle}>
         {/* <Link href="/">
           <a>Logo</a>
-        </Link> */}
+        </Link> */}{' '}
+        <Image src="/logo-pink.png" width="40px" height="40px" />
         <Link href="/">
           <a>knit2gether</a>
         </Link>

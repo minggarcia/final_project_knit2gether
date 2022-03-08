@@ -73,6 +73,7 @@ const nextButton = css`
 
 const joinButton = css`
   color: white;
+  font-family: 'Syne', sans-serif;
   background: #779677;
   text-align: center;
   width: 200px;
@@ -86,12 +87,15 @@ const joinButton = css`
 
 const joinSectionStyle = css`
   margin-top: 80px;
+  display: flex;
   gap: 20px;
-  display: block;
+  p {
+    color: #d7839b;
+    margin-top: 80px;
+  }
 `;
 
 const spanStyle = css`
-  color: #d7839b;
   font-size: 18px;
   justify-content: center;
   margin-top: 30px;
@@ -207,9 +211,9 @@ export default function Login(props: Props) {
               <button css={nextButton}>
                 <Image
                   alt="arrow pointing to right"
-                  src="/arrow.png"
-                  width="40"
-                  height="20"
+                  src="/right-arrow.png"
+                  width="50"
+                  height="40"
                 />
               </button>
             </div>
@@ -220,8 +224,9 @@ export default function Login(props: Props) {
                 <button css={joinButton}>join the party</button>
               </a>
             </Link>
+
+            <p>show off your knits and register now!</p>
           </div>
-          <span css={spanStyle}>show off your knits and register now!</span>
         </div>
       </div>
     </div>

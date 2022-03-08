@@ -28,12 +28,12 @@ function MyApp({ Component, pageProps }) {
         styles={css`
           html,
           body {
-            margin: 0;
+            margin: 0 10px;
             box-sizing: border-box;
             font-family: 'Syne', sans-serif;
           }
           main {
-            margin: 0 50px;
+            margin: 0 20px;
           }
         `}
       />

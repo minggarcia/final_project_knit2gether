@@ -44,13 +44,13 @@ export default function Home(props: Props) {
         </Head>
         <div css={homepageStyle}>
           <div css={imageSection}>
-            <Image
+            {/* <Image
               css={imageStyle}
               alt="people making a knit project"
               src="/Knit_and_Crochet_Meetup.jpg"
-              width="890"
+              width="900"
               height="456"
-            />
+            /> */}
           </div>
           <div css={newKnitsSection}>
             <h2>newest knitties from the community</h2>

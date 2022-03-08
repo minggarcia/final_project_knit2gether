@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createCsrfToken } from '../util/auth';
@@ -52,6 +53,7 @@ const createAccountButton = css`
   font-size: 18px;
   font-family: 'Syne', sans-serif;
   border: transparent;
+  cursor: pointer;
 `;
 
 const imageStyleSection = css`
@@ -73,6 +75,30 @@ const imageStyle = css`
 const errorStyles = css`
   margin-top: 20px;
   color: red;
+`;
+
+const loginSectionStyle = css`
+  display: flex;
+  margin-top: 90px;
+  gap: 20px;
+  p {
+    color: #d7839b;
+    margin-top: 80px;
+  }
+`;
+
+const loginButton = css`
+  color: white;
+  background: #779677;
+  text-align: center;
+  width: 150px;
+  height: 75px;
+  border-radius: 38px;
+  margin-top: 50px;
+  font-size: 18px;
+  font-family: 'Syne', sans-serif;
+  border: transparent;
+  cursor: pointer;
 `;
 
 type Errors = { message: string }[];
@@ -148,6 +174,15 @@ export default function Register(props: Props) {
               <button css={createAccountButton}>Create Account</button>
             </div>
           </form>
+          <div css={loginSectionStyle}>
+            <Link href="/login">
+              <a>
+                <button css={loginButton}>Log In</button>
+              </a>
+            </Link>
+
+            <p>Already have an account?</p>
+          </div>
         </div>
       </div>
 
