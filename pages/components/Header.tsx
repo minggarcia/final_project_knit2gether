@@ -92,7 +92,9 @@ export default function Header(props: Props) {
       <div css={underHeaderContent}>
         <div>
           {props.userObject ? (
-            <a href="/logout">Logout</a>
+            <Link href="/logout">
+              <a>Logout</a>
+            </Link>
           ) : (
             <>
               <Link href="/register">

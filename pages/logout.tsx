@@ -11,9 +11,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   if (token) {
     console.log(token);
-    // 2. we want to delete the session from our database
+    // 2. delete the session from our database
     await deleteSessionByToken(token);
-    // 3. we want to set the cookie destruction
+    // 3.  set the cookie destruction
 
     context.res.setHeader(
       'Set-Cookie',
