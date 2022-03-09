@@ -252,11 +252,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  // 1. check if there is a token and is valid from the cookie
+  // 1. check if there is a token and if it is valid from the cookie
   const token = context.req.cookies.sessionToken;
 
   if (token) {
-    // 2. check if the token its valid and redirect
+    // 2. check if the token is valid and redirect
     const session = await getValidSessionByToken(token);
 
     if (session) {
