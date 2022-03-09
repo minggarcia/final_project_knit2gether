@@ -21,7 +21,7 @@ const welcomeSectionStyle = css`
   justify-content: center;
   display: flex;
   color: #d7839b;
-  gap: 20px;
+  gap: 40px;
 `;
 
 const imageSectionStyle = css`
