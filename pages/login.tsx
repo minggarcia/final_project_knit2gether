@@ -61,9 +61,6 @@ const inputFieldStyle = css`
   margin-top: 30px;
   width: 240px;
   border: transparent;
-  :focus {
-    border: #779677 solid 2px;
-  }
 `;
 
 const nextButton = css`

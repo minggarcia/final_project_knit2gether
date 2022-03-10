@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { User } from '../../util/database';
 
@@ -14,6 +13,7 @@ const headerStyle = css`
   border: solid 4px #779677;
   border-radius: 20px;
   padding: 20px 10px;
+  box-shadow: 5px 10px 20px #779677;
 
   cursor: pointer;
   a {
@@ -89,14 +89,14 @@ export default function Header(props: Props) {
         </Link>
         {props.userObject && (
           <div>
-            hi bestie, {''}
+            hi bestie,
             {props.userObject.username}
           </div>
         )}{' '}
       </div>
 
       <div>
-        <div>
+        <div css={underHeaderContent}>
           {props.userObject ? (
             <Link href="/logout">
               <a>Logout</a>

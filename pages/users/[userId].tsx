@@ -1,7 +1,31 @@
+import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import { getUserById, User } from '../../util/database';
 import Layout from '../components/Layout';
+
+const descriptionSectionStyle = css`
+  display: flex;
+  justify-content: center;
+  background: #e4deca;
+  padding: 20px 50px;
+  border-radius: 20px;
+  margin: 80px 200px;
+  color: #d7839b;
+`;
+
+const descriptionContentStyle = css`
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+`;
+
+const bioStyle = css`
+  color: #779677;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 type Props = {
   user?: User;
@@ -10,7 +34,7 @@ type Props = {
 export default function UserProfile(props: Props) {
   if (!props.user) {
     return (
-      <Layout>
+      <Layout userObject={props.userObject}>
         <Head>
           <title>User not found</title>
           <meta name="description" content="User not found" />
@@ -26,16 +50,24 @@ export default function UserProfile(props: Props) {
           <title>Profile</title>
 
           <meta
-            name="Profile"
+            name="description"
             content={`Profile Page of ${props.user.username}`}
           />
         </Head>
-        <div>
+        {/* <div>
           <h1>Welcome {props.user.username}!</h1>
+        </div> */}
+        <div css={descriptionSectionStyle}>
+          <div css={descriptionContentStyle}>
+            <div>'picture' </div>
+            <div>{props.user.username}</div>
+            <div>knitties</div>
+            <div>member since</div>
+          </div>
+          {/* <div css={bioStyle}>bio description</div> */}
         </div>
-        <div>
-          <p>This should be the profile page</p>
-        </div>
+
+        <div>{/* <p>This should be the profile page</p> */}</div>
       </Layout>
     </div>
   );
