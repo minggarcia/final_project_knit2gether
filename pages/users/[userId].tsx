@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { getUserById, User } from '../../util/database';
 import Layout from '../components/Layout';
 
@@ -66,7 +67,13 @@ export default function UserProfile(props: Props) {
           </div>
           {/* <div css={bioStyle}>bio description</div> */}
         </div>
-
+        <div>
+          <Link href="/upload">
+            <a>
+              <button>Upload</button>
+            </a>
+          </Link>
+        </div>
         <div>{/* <p>This should be the profile page</p> */}</div>
       </Layout>
     </div>
