@@ -72,28 +72,6 @@ export async function getUserById(id: number) {
   return user && camelCaseKeys(user);
 }
 
-// READ USER BY VALID SESSION TOKEN
-
-export async function getUserByValidSessionToken(token: string | undefined) {
-  if (!token) return undefined;
-  const [user] = await sql<[User | undefined]>`
-    SELECT
-      users.id,
-      users.username
-    FROM
-      users,
-      sessions
-      -- ADD TABLE COMMENTS
-      -- ,comments
-      --, likes
-    WHERE
-      sessions.token = ${token} AND
-      sessions.user_id = users.id AND
-      sessions.expiry_timestamp > now()
-  `;
-  return user && camelCaseKeys(user);
-}
-
 // READ USER BY USERNAME
 
 export async function getUserByUsername(username: string) {
@@ -134,6 +112,28 @@ export async function createSession(token: string, userId: number) {
 
   await deleteExpiredSessions();
   return camelCaseKeys(session);
+}
+
+// READ USER BY VALID SESSION TOKEN
+
+export async function getUserByValidSessionToken(token: string | undefined) {
+  if (!token) return undefined;
+  const [user] = await sql<[User | undefined]>`
+    SELECT
+      users.id,
+      users.username
+    FROM
+      users,
+      sessions
+      -- ADD TABLE COMMENTS
+      -- ,comments
+      --, likes
+    WHERE
+      sessions.token = ${token} AND
+      sessions.user_id = users.id AND
+      sessions.expiry_timestamp > now()
+  `;
+  return user && camelCaseKeys(user);
 }
 
 // READ A VALID SESSION TOKEN
@@ -205,12 +205,25 @@ export async function createPost(
   yarnName: string,
 ) {
   const [post] = await sql<[Post]>`
-  INSERT INTO sessions
+  INSERT INTO posts
   (title, description, needleSize, yarnName)
   VALUES
   (${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
   *`;
 
+  return camelCaseKeys(post);
+}
+
+// READ POST
+
+export async function getPostById(id: number) {
+  const [post] = await sql<[Post]>`
+  SELECT
+   id, title, description, needle_size, yarn_name
+   FROM
+   posts
+   WHERE
+   id = ${id}`;
   return camelCaseKeys(post);
 }

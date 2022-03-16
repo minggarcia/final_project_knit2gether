@@ -27,33 +27,79 @@ const inputFieldStyle = css`
   border: transparent;
 `;
 
-type Props = {
-  refreshUserProfile: () => void;
-  userObject: { username: string };
-};
+// type Props = {
+//   refreshUserProfile: () => void,
+//   userObject: { username: string },
+// };
 
-export default function Upload(props: Props) {
-  const [selectedImage, setSelectedImage] = useState();
-  const [fileInputState, setFileInputState] = useState('');
-  const [previewSource, setPreviewSource] = useState('');
+export default function Upload(props) {
+  // const [selectedImage, setSelectedImage] = useState();
+  // const [fileInputState, setFileInputState] = useState('');
+  // const [previewSource, setPreviewSource] = useState('');
+  const [imageSource, setImageSource] = useState();
+  const [uploadData, setUploadData] = useState();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [needleSize, setNeedleSize] = useState('');
   const [yarnName, setYarnName] = useState('');
   const router = useRouter();
 
-  const handleOnChange = (e) => {
-    const file = e.target.files[0];
-    previewFile(file);
-  };
+  // const handleOnChange = (e) => {
+  //   const file = e.target.files[0];
+  //   previewFile(file);
+  // };
 
-  const previewFile = (file) => {
+  // const previewFile = (file) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     setPreviewSource(reader.result);
+  //   };
+  // };
+
+  // ON CHANGE HANDLER TRIGGERS WHEN FILE INPUT CHANGES
+
+  function handleOnChange(changeEvent) {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreviewSource(reader.result);
+
+    reader.onload = function (onLoadEvent) {
+      setImageSource(onLoadEvent.target.result);
+      setUploadData(undefined);
     };
-  };
+
+    reader.readAsDataURL(changeEvent.target.files[0]);
+  }
+
+  // ON SUBMIT WHEN FORM IS SUBMITTED
+
+  async function handleOnSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fileInput = Array.from(form.elements).find(
+      ({ name }) => name === 'file',
+    );
+    console.log(fileInput);
+
+    const formData = new FormData();
+    for (const file of fileInput.files) {
+      formData.append('file', file);
+    }
+
+    formData.append('upload_preset', 'uploads');
+
+    const data = await fetch(
+      'https://api.cloudinary.com/v1_1/knit2gether/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    ).then((response) => response.json());
+
+    setImageSource(data.secure_url);
+    setUploadData(data);
+
+    console.log(data);
+  }
 
   return (
     <div>
@@ -90,7 +136,22 @@ export default function Upload(props: Props) {
           >
             <div css={inputFieldSectionStyles}>
               <div>Upload knit</div>
-              <input type="file" onChange={handleOnChange} />
+              <input
+                type="file"
+                onChange={handleOnChange}
+                onSubmit={handleOnSubmit}
+              />
+
+              <div>
+                {imageSource &&
+                  !uploadData(
+                    <img
+                      src={imageSource}
+                      alt="preview"
+                      style={{ height: '200px' }}
+                    />,
+                  )}
+              </div>
               <div>
                 <input
                   css={inputFieldStyle}
@@ -130,14 +191,6 @@ export default function Upload(props: Props) {
               </div>
             </div>
           </form>
-
-          {previewSource && (
-            <img
-              src={previewSource}
-              alt="preview"
-              style={{ height: '200px' }}
-            />
-          )}
         </div>
       </Layout>
     </div>
