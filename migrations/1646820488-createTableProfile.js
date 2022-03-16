@@ -3,7 +3,8 @@ exports.up = async (sql) => {
     CREATE TABLE profile (
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       bio varchar(200) NOT NULL,
-			user_id integer REFERENCES users (id) ON DELETE CASCADE
+			user_id integer REFERENCES users (id) ON DELETE CASCADE,
+      post_id integer REFERENCES posts (id) ON DELETE CASCADE
 
 
     );

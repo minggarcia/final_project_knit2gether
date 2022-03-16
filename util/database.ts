@@ -29,10 +29,19 @@ type Session = {
   userId: number;
 };
 
-type Profile = {
+export type Profile = {
   id: number;
   userId: number;
   bio: string;
+};
+
+export type Post = {
+  id: number;
+  userId: number;
+  title: string;
+  description: string;
+  needleSize: string;
+  yarnName: string;
 };
 
 // CREATE USER
@@ -76,6 +85,7 @@ export async function getUserByValidSessionToken(token: string | undefined) {
       sessions
       -- ADD TABLE COMMENTS
       -- ,comments
+      --, likes
     WHERE
       sessions.token = ${token} AND
       sessions.user_id = users.id AND
@@ -171,9 +181,25 @@ export async function deleteExpiredSessions() {
   return sessions.map((session) => camelCaseKeys(session));
 }
 
-export async function createProfile(userId: number, bio: string) {
+// CREATE PROFILE BIO
+
+export async function createProfileBio(userId: number, bio: string) {
   const [profile] = await sql<[Profile]>`
 
+  INSERT INTO sessions
+  (bio, user_id)
+  VALUES
+  (${bio}, ${userId})
+  RETURNING
+  bio, id`;
+
+  return camelCaseKeys(profile);
+}
+
+// CREATE POST
+
+export async function createPost(title: string) {
+  const [post] = await sql<[Post]>`
   INSERT INTO sessions
   (bio, user_id)
   VALUES

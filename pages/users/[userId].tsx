@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
 import { getUserById, User } from '../../util/database';
 import Layout from '../components/Layout';
 
@@ -32,7 +33,10 @@ type Props = {
   user?: User;
   userObject: { username: string };
 };
+
 export default function UserProfile(props: Props) {
+  const [bio, setBio] = useState('');
+
   if (!props.user) {
     return (
       <Layout userObject={props.userObject}>
@@ -65,16 +69,37 @@ export default function UserProfile(props: Props) {
             <div>knitties</div>
             <div>member since</div>
           </div>
-          {/* <div css={bioStyle}>bio description</div> */}
         </div>
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
+            const response = await fetch('api/profile', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                bio: bio,
+              }),
+            });
+            const responseBody = await response.json();
+          }}
+        >
+          <div css={bioStyle}>
+            bio description
+            <input
+              value={bio}
+              onChange={(event) => setBio(event.currentTarget.value)}
+            />
+          </div>
+        </form>
         <div>
           <Link href="/upload">
             <a>
-              <button>Upload</button>
+              <button>+</button>
             </a>
           </Link>
         </div>
-        <div>{/* <p>This should be the profile page</p> */}</div>
       </Layout>
     </div>
   );
@@ -91,7 +116,7 @@ export async function getServerSideProps(
   }
 
   const user = await getUserById(parseInt(userId));
-
+  // if there is not user found
   if (!user) {
     context.res.statusCode = 404;
     return {

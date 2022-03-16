@@ -87,12 +87,7 @@ export default function Header(props: Props) {
         <Link href="/">
           <a>knit2gether</a>
         </Link>
-        {props.userObject && (
-          <div>
-            hi bestie,
-            {props.userObject.username}
-          </div>
-        )}{' '}
+        {props.userObject && <div>hi bestie, {props.userObject.username}</div>}{' '}
       </div>
 
       <div>

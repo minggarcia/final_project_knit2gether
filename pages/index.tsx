@@ -16,7 +16,7 @@ const imageStyle = css`
   justify-content: center;
 `;
 
-const welcomeSectionStyle = css`
+const h1Style = css`
   margin-top: 30px;
   justify-content: center;
   display: flex;
@@ -52,7 +52,7 @@ export default function Home(props: Props) {
           <meta name="Homepage" content="Homepage" />
         </Head>
         <div css={homepageStyle}>
-          <div css={welcomeSectionStyle}>
+          <div css={h1Style}>
             <h1>Welcome to knit2gether</h1>
             <Image src="/logo-pink.png" width="80px" height="30px" />
           </div>

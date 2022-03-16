@@ -10,6 +10,7 @@
     "migrate": "dotenv ley"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.7.0",
     "@emotion/babel-plugin": "^11.7.2",
     "@emotion/react": "^11.8.1",
     "bcrypt": "^5.0.1",
