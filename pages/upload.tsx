@@ -1,8 +1,6 @@
-// import { Cloudinary } from '@cloudinary/url-gen';
-// import { fill } from '@cloudinary/url-gen/actions/resize';
 import { css } from '@emotion/react';
-// import cloudinary from 'cloudinary';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from './components/Layout';
 
@@ -28,35 +26,34 @@ const inputFieldStyle = css`
   width: 240px;
   border: transparent;
 `;
-// // set cloud name:
-// const cld = new Cloudinary({
-//   cloud: {
-//     cloudName: 'knit2gether',
-//   },
-// });
-
-// // Instantiate a CloudinaryImage object for the image with the public ID, 'docs/models'.
-// const myImage = cld.image('docs/models');
-
-// // Resize to 250 x 250 pixels using the 'fill' crop mode.
-// myImage.resize(fill().width(250).height(250));
-
-// // Render the image in an 'img' element.
-// const imgElement = document.createElement('img');
-// document.body.appendChild(imgElement);
-// imgElement.src = myImage.toURL();
 
 type Props = {
+  refreshUserProfile: () => void;
   userObject: { username: string };
 };
 
 export default function Upload(props: Props) {
-  // const [imageSource, setImageSource] = useState();
-  // const [uploadData, setUploadData] = useState();
+  const [selectedImage, setSelectedImage] = useState();
+  const [fileInputState, setFileInputState] = useState('');
+  const [previewSource, setPreviewSource] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [needleSize, setNeedleSize] = useState('');
   const [yarnName, setYarnName] = useState('');
+  const router = useRouter();
+
+  const handleOnChange = (e) => {
+    const file = e.target.files[0];
+    previewFile(file);
+  };
+
+  const previewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
 
   return (
     <div>
@@ -71,10 +68,29 @@ export default function Upload(props: Props) {
           <h1 css={h1Style}>Upload you project</h1>
         </div>
         <div>
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+
+              await fetch('/api/upload', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  title: title,
+                  description: description,
+                  needleSize: needleSize,
+                  yarnName: yarnName,
+                }),
+              });
+              props.refreshUserProfile();
+              await router.push(`/`);
+            }}
+          >
             <div css={inputFieldSectionStyles}>
               <div>Upload knit</div>
-              <input type="file" />
+              <input type="file" onChange={handleOnChange} />
               <div>
                 <input
                   css={inputFieldStyle}
@@ -114,13 +130,16 @@ export default function Upload(props: Props) {
               </div>
             </div>
           </form>
+
+          {previewSource && (
+            <img
+              src={previewSource}
+              alt="preview"
+              style={{ height: '200px' }}
+            />
+          )}
         </div>
       </Layout>
     </div>
   );
 }
-
-// export async function getServerSideProps() {
-//   const cloudinary = await import('cloudinary');
-//   return;
-// }

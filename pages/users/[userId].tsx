@@ -83,6 +83,8 @@ export default function UserProfile(props: Props) {
               }),
             });
             const responseBody = await response.json();
+            console.log(responseBody);
+            return;
           }}
         >
           <div css={bioStyle}>

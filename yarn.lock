@@ -1876,7 +1876,7 @@ cloudinary-core@^2.10.2:
 
 cloudinary@^1.28.1:
   version "1.28.1"
-  resolved "https://registry.npmjs.org/cloudinary/-/cloudinary-1.28.1.tgz"
+  resolved "https://registry.yarnpkg.com/cloudinary/-/cloudinary-1.28.1.tgz#84846c6499213c5a034000cf229aa9c00b12a6c5"
   integrity sha512-iCSgX/GjyNRYUf/1kQgyLl8UdhPKUWIxsAvCD0qjUcnnIZqHk5tJQmCt5YpGh/r1tVdKa4TV/iDB12S33Zjy0w==
   dependencies:
     cloudinary-core "^2.10.2"

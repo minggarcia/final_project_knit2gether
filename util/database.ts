@@ -198,14 +198,19 @@ export async function createProfileBio(userId: number, bio: string) {
 
 // CREATE POST
 
-export async function createPost(title: string) {
+export async function createPost(
+  title: string,
+  description: string,
+  needleSize: string,
+  yarnName: string,
+) {
   const [post] = await sql<[Post]>`
   INSERT INTO sessions
-  (bio, user_id)
+  (title, description, needleSize, yarnName)
   VALUES
-  (${bio}, ${userId})
+  (${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
-  bio, id`;
+  *`;
 
-  return camelCaseKeys(profile);
+  return camelCaseKeys(post);
 }

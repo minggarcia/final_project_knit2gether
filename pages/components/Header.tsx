@@ -92,6 +92,9 @@ export default function Header(props: Props) {
 
       <div>
         <div css={underHeaderContent}>
+          {/* <Link href=`/users/${user.id}`>
+            <a>Profile</a>
+          </Link> */}
           {props.userObject ? (
             <Link href="/logout">
               <a>Logout</a>
