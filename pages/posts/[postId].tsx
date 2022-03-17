@@ -1,6 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { getPostById } from '../../util/database';
 import Layout from '../components/Layout';
 
 type Props = {
@@ -22,20 +20,20 @@ export default function SinglePost(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // id we get after the slash in the URL
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   // id we get after the slash in the URL
 
-  const postId = context.query.postId;
+//   const postId = context.query.postId;
 
-  if (!postId || Array.isArray(postId)) {
-    return { props: {} };
-  }
+//   if (!postId || Array.isArray(postId)) {
+//     return { props: {} };
+//   }
 
-  const post = await getPostById(parseInt(postId));
+//   const post = await getPostById(parseInt(postId));
 
-  return {
-    props: {
-      post: post,
-    },
-  };
-}
+//   return {
+//     props: {
+//       post: post,
+//     },
+//   };
+// }

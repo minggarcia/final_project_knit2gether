@@ -3,7 +3,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import { getUserById, User } from '../../util/database';
+import { getPosts, getUserById, Post, User } from '../../util/database';
 import Layout from '../components/Layout';
 
 const descriptionSectionStyle = css`
@@ -32,6 +32,7 @@ const bioStyle = css`
 type Props = {
   user?: User;
   userObject: { username: string };
+  posts: Post[];
 };
 
 export default function UserProfile(props: Props) {
@@ -101,11 +102,35 @@ export default function UserProfile(props: Props) {
               <button>+</button>
             </a>
           </Link>
+
+          <div>
+            <h2>projects</h2>
+            <div>
+              {props.posts.map((post) => {
+                return (
+                  <div key={`post-${post.id}`}>
+                    <Link href={`/post-${post.id}`}>
+                      <a>this should be an image</a>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </Layout>
     </div>
   );
 }
+
+// Code in getServerSideProps runs only in
+// Node.js, and allows you to do fancy things:
+// - Read files from the file system
+// - Connect to a (real) database
+//
+// getServerSideProps is exported from your files
+// (ONLY FILES IN /pages) and gets imported
+// by Next.js
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -127,9 +152,17 @@ export async function getServerSideProps(
     };
   }
 
+  const posts = await getPosts();
+
+  // Important:
+  // - Always return an object from getServerSideProps
+  // - Always return a key in that object that is
+  // called props
+
   return {
     props: {
       user: user,
+      posts: posts,
     },
   };
 }

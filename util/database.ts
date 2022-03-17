@@ -217,7 +217,15 @@ export async function createPost(
   return camelCaseKeys(post);
 }
 
-// READ POST
+// GET ALL POSTS
+
+export async function getPosts() {
+  const posts = await sql<Post[]>`
+  SELECT * FROM posts;`;
+  return posts.map((post) => camelCaseKeys(post));
+}
+
+// GET SINGLE POST
 
 export async function getPostById(id: number) {
   const [post] = await sql<[Post]>`
@@ -229,3 +237,5 @@ export async function getPostById(id: number) {
    id = ${id}`;
   return camelCaseKeys(post);
 }
+
+// DELETE POST
