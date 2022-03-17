@@ -38,6 +38,7 @@ export type Profile = {
 export type Post = {
   id: number;
   userId: number;
+  image: string;
   title: string;
   description: string;
   needleSize: string;
@@ -199,6 +200,7 @@ export async function createProfileBio(userId: number, bio: string) {
 // CREATE POST
 
 export async function createPost(
+  image: string,
   title: string,
   description: string,
   needleSize: string,
@@ -206,9 +208,9 @@ export async function createPost(
 ) {
   const [post] = await sql<[Post]>`
   INSERT INTO posts
-  (title, description, needleSize, yarnName)
+  (image, title, description, needleSize, yarnName)
   VALUES
-  (${title}, ${description}, ${needleSize}, ${yarnName})
+  (${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
   *`;
 
@@ -220,7 +222,7 @@ export async function createPost(
 export async function getPostById(id: number) {
   const [post] = await sql<[Post]>`
   SELECT
-   id, title, description, needle_size, yarn_name
+   id, image, title, description, needle_size, yarn_name
    FROM
    posts
    WHERE

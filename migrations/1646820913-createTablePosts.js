@@ -2,6 +2,7 @@ exports.up = async (sql) => {
   await sql`
     CREATE TABLE posts (
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+      image varchar(300) NOT NULL,
 			user_id integer REFERENCES users (id) ON DELETE CASCADE,
 			title varchar(20) NOT NULL,
 			description varchar(100),

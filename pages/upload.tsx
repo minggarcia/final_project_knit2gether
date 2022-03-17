@@ -1,3 +1,4 @@
+import { image } from '@cloudinary/url-gen/qualifiers/source';
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -27,18 +28,19 @@ const inputFieldStyle = css`
   border: transparent;
 `;
 
-// type Props = {
-//   refreshUserProfile: () => void,
-//   userObject: { username: string },
-// };
+type Props = {
+  refreshUserProfile: () => void;
+  userObject: { username: string };
+  cloudinaryAPI: string;
+};
 
-export default function Upload(props) {
+export default function Upload(props: Props) {
   // const [selectedImage, setSelectedImage] = useState();
   // const [fileInputState, setFileInputState] = useState('');
   // const [previewSource, setPreviewSource] = useState('');
-  const [imageSource, setImageSource] = useState();
-  const [uploadData, setUploadData] = useState();
+  const [imageSource, setImageSource] = useState('');
   const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState('');
   const [needleSize, setNeedleSize] = useState('');
   const [yarnName, setYarnName] = useState('');
@@ -59,47 +61,66 @@ export default function Upload(props) {
 
   // ON CHANGE HANDLER TRIGGERS WHEN FILE INPUT CHANGES
 
-  function handleOnChange(changeEvent) {
-    const reader = new FileReader();
+  // function handleOnChange(changeEvent) {
+  //   const reader = new FileReader();
 
-    reader.onload = function (onLoadEvent) {
-      setImageSource(onLoadEvent.target.result);
-      setUploadData(undefined);
-    };
+  //   reader.onload = function (onLoadEvent) {
+  //     setImageSource(onLoadEvent.target.result);
+  //     setUploadData(undefined);
+  //   };
 
-    reader.readAsDataURL(changeEvent.target.files[0]);
-  }
+  //   reader.readAsDataURL(changeEvent.target.files[0]);
+  // }
 
-  // ON SUBMIT WHEN FORM IS SUBMITTED
+  // // ON SUBMIT WHEN FORM IS SUBMITTED
 
-  async function handleOnSubmit(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const fileInput = Array.from(form.elements).find(
-      ({ name }) => name === 'file',
-    );
-    console.log(fileInput);
+  // async function handleOnSubmit(event) {
+  //   event.preventDefault();
+  //   const form = event.currentTarget;
+  //   const fileInput = Array.from(form.elements).find(
+  //     ({ name }) => name === 'file',
+  //   );
+  //   console.log(fileInput);
 
+  //   const formData = new FormData();
+  //   for (const file of fileInput.files) {
+  //     formData.append('file', file);
+  //   }
+
+  //   formData.append('upload_preset', 'uploads');
+
+  //   const data = await fetch(
+  //     'https://api.cloudinary.com/v1_1/knit2gether/image/upload',
+  //     {
+  //       method: 'POST',
+  //       body: formData,
+  //     },
+  //   ).then((response) => response.json());
+
+  //   setImageSource(data.secure_url);
+  //   setUploadData(data);
+
+  //   console.log(data);
+  // }
+
+  const uploadImage = async (event: any) => {
+    const files = event.currentTarget.files;
     const formData = new FormData();
-    for (const file of fileInput.files) {
-      formData.append('file', file);
-    }
-
+    formData.append('file', files[0]);
     formData.append('upload_preset', 'uploads');
-
-    const data = await fetch(
-      'https://api.cloudinary.com/v1_1/knit2gether/image/upload',
+    setLoading(true);
+    const response = await fetch(
+      `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
       {
         method: 'POST',
         body: formData,
       },
-    ).then((response) => response.json());
+    );
+    const file = await response.json();
 
-    setImageSource(data.secure_url);
-    setUploadData(data);
-
-    console.log(data);
-  }
+    setImageSource(file.secure_url);
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -125,6 +146,7 @@ export default function Upload(props) {
                 },
                 body: JSON.stringify({
                   title: title,
+                  image: image,
                   description: description,
                   needleSize: needleSize,
                   yarnName: yarnName,
@@ -136,21 +158,18 @@ export default function Upload(props) {
           >
             <div css={inputFieldSectionStyles}>
               <div>Upload knit</div>
-              <input
-                type="file"
-                onChange={handleOnChange}
-                onSubmit={handleOnSubmit}
-              />
+              <input type="file" onChange={uploadImage} />
 
               <div>
-                {imageSource &&
-                  !uploadData(
-                    <img
-                      src={imageSource}
-                      alt="preview"
-                      style={{ height: '200px' }}
-                    />,
-                  )}
+                {loading ? (
+                  <p>Loading ...</p>
+                ) : (
+                  <img
+                    src={imageSource}
+                    alt="preview"
+                    style={{ height: '200px' }}
+                  />
+                )}
               </div>
               <div>
                 <input
@@ -195,4 +214,14 @@ export default function Upload(props) {
       </Layout>
     </div>
   );
+}
+
+export function getServerSideProps() {
+  const cloudinaryAPI = process.env.CLOUDINARY_NAME;
+
+  return {
+    props: {
+      cloudinaryAPI,
+    },
+  };
 }

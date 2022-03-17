@@ -8,6 +8,7 @@ export default async function uploadPostHandler(
   if (request.method === 'POST') {
     const post = await createPost(
       request.body.title,
+      request.body.image,
       request.body.description,
       request.body.needleSize,
       request.body.yarnName,
