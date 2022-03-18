@@ -15,13 +15,13 @@ type LoginRequestBody = {
   csrfToken: string;
 };
 
-export type LoginResponseBody =
-  | { errors: { message: string }[] }
-  | { user: Pick<User, 'id'> };
-
 type LoginNextApiRequest = Omit<NextApiRequest, 'body'> & {
   body: LoginRequestBody;
 };
+
+export type LoginResponseBody =
+  | { errors: { message: string }[] }
+  | { user: Pick<User, 'id'> };
 
 export default async function loginHandler(
   request: LoginNextApiRequest,

@@ -117,8 +117,8 @@ export default function Upload(props: Props) {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                  image: imageSource,
                   title: title,
-                  image: image,
                   description: description,
                   needleSize: needleSize,
                   yarnName: yarnName,

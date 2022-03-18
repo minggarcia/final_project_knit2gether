@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createPost, Post } from '../../util/database';
 
 type UploadRequestBody = {
-  title: string;
   image: string;
+  title: string;
   description: string;
   needleSize: string;
   yarnName: string;
@@ -22,9 +22,10 @@ export default async function uploadPostHandler(
   response: NextApiResponse<UploadResponseBody>,
 ) {
   if (request.method === 'POST') {
+    console.log(request.body);
     const post = await createPost(
-      request.body.title,
       request.body.image,
+      request.body.title,
       request.body.description,
       request.body.needleSize,
       request.body.yarnName,

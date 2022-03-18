@@ -187,7 +187,7 @@ export async function deleteExpiredSessions() {
 export async function createProfileBio(userId: number, bio: string) {
   const [profile] = await sql<[Profile]>`
 
-  INSERT INTO sessions
+  INSERT INTO profile
   (bio, user_id)
   VALUES
   (${bio}, ${userId})
@@ -208,11 +208,11 @@ export async function createPost(
 ) {
   const [post] = await sql<[Post]>`
   INSERT INTO posts
-  (image, title, description, needleSize, yarnName)
+  (image, title, description, needle_size, yarn_name)
   VALUES
   (${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
-  *`;
+  image, title, description, yarn_name, needle_size`;
 
   return camelCaseKeys(post);
 }
