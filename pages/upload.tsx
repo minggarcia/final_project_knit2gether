@@ -1,4 +1,3 @@
-import { image } from '@cloudinary/url-gen/qualifiers/source';
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -131,7 +130,7 @@ export default function Upload(props: Props) {
               console.log('uploadResponseBody', uploadResponseBody);
 
               props.refreshUserProfile();
-              await router.push(`/`);
+              await router.push('/');
             }}
           >
             <div css={uploadStyle}>

@@ -105,7 +105,7 @@ export default function UserProfile(props: Props) {
 
           <div>
             <h2>projects</h2>
-            <div>
+            {/* <div>
               {props.posts.map((post) => {
                 return (
                   <div key={`post-${post.id}`}>
@@ -115,7 +115,7 @@ export default function UserProfile(props: Props) {
                   </div>
                 );
               })}
-            </div>
+            </div> */}
           </div>
         </div>
       </Layout>
@@ -163,6 +163,7 @@ export async function getServerSideProps(
     props: {
       user: user,
       // posts: posts,
+      // profile: profile,
     },
   };
 }
