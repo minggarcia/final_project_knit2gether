@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { getPosts, getUserById, Post, User } from '../../util/database';
@@ -79,7 +80,6 @@ export default function UserProfile(props: Props) {
             <div>'picture' </div>
             <div>{props.user.username}</div>
             <div>knitties</div>
-            <div>member since</div>
           </div>
         </div>
         <form
@@ -116,17 +116,22 @@ export default function UserProfile(props: Props) {
 
           <div>
             <h2>projects</h2>
-            {/* <div>
-              {props.posts.map((post) => {
-                return (
-                  <div key={`post-${post.id}`}>
-                    <Link href={`/post-${post.id}`}>
-                      <a>this should be an image</a>
-                    </Link>
-                  </div>
-                );
-              })}
-            </div> */}
+            {/* {props.posts.map((post) => {
+              return (
+                <div key={`post-${post.id}`}>
+                  <Link href={`/posts/${post.id}`}>
+                    <a>
+                      <Image
+                        alt="uploaded post"
+                        src={props.posts.image}
+                        width="100px"
+                        height="100px"
+                      />
+                    </a>
+                  </Link>
+                </div>
+              );
+            })} */}
           </div>
         </div>
       </Layout>
@@ -164,6 +169,7 @@ export async function getServerSideProps(
   }
 
   const posts = await getPosts();
+  console.log('database', posts);
 
   // Important:
   // - Always return an object from getServerSideProps
@@ -173,8 +179,6 @@ export async function getServerSideProps(
   return {
     props: {
       user: user,
-      // posts: posts,
-      // profile: profile,
     },
   };
 }

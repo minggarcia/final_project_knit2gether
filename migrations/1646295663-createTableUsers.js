@@ -9,6 +9,7 @@ exports.up = async (sql) => {
 };
 
 exports.down = async (sql) => {
+  console.log('dropping users');
   await sql`
     DROP TABLE users
   `;

@@ -2139,7 +2139,7 @@ doctrine@^3.0.0:
 
 dotenv-cli@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/dotenv-cli/-/dotenv-cli-5.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/dotenv-cli/-/dotenv-cli-5.0.0.tgz#13ff77794096b00968d96187e4c8674e045461f3"
   integrity sha512-0Cb2WMDJ805hTD7m43gXXFLraoE5KwrKmGW2dAzYvSEB96tlKI2hmcJ/9In4s2FfvkAFk3SjNQcLeKLoRSXhKA==
   dependencies:
     cross-spawn "^7.0.3"

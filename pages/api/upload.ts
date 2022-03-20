@@ -7,6 +7,7 @@ type UploadRequestBody = {
   description: string;
   needleSize: string;
   yarnName: string;
+  userId: number;
 };
 
 type UploadNextApiRequest = Omit<NextApiRequest, 'body'> & {
@@ -22,7 +23,7 @@ export default async function uploadPostHandler(
   response: NextApiResponse<UploadResponseBody>,
 ) {
   if (request.method === 'POST') {
-    console.log(request.body);
+    console.log('request body', request.body);
     const post = await createPost(
       request.body.image,
       request.body.title,

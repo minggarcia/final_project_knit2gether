@@ -8,13 +8,12 @@ exports.up = async (sql) => {
 			description varchar(300),
 			needle_size varchar(30) ,
 			yarn_name varchar(50)
-
-
     );
   `;
 };
 
 exports.down = async (sql) => {
+  console.log('dropping posts');
   await sql`
     DROP TABLE likes
   `;
