@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { getPostById, Post } from '../../util/database';
 import Layout from '../components/Layout';
 
@@ -12,6 +13,21 @@ const postStyle = css`
 const imageStyle = css`
   display: block;
   margin-top: 50px;
+
+  border-radius: 66px;
+`;
+
+const likeCommentSection = css`
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+`;
+
+const commentSectionStyle = css`
+  color: #779677;
+  display: flex;
+  border-radius: 66px;
+  background: #e4deca; ;
 `;
 
 const projectInfoStyle = css`
@@ -19,7 +35,7 @@ const projectInfoStyle = css`
   border-radius: 66px;
   width: 543px;
   height: 600px;
-  margin: 30px 50px;
+  margin: 50px 50px;
   padding: 50px;
   box-shadow: 5px 10px 20px #957666;
   align-items: center;
@@ -29,24 +45,26 @@ const projectInfoStyle = css`
 
 const titleStyle = css`
   color: #779677;
-  font-size: 40px;
+  font-size: 25px;
   font-weight: bold;
   margin-bottom: 40px;
 `;
 
 const descriptionStyle = css`
   color: #d7839b;
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 `;
 
 const needleSizeStyle = css`
-  background: #e4deca;
   margin-bottom: 40px;
+  margin-top: 20px;
+  color: #d7839b;
 `;
 
 const yarnNameStyle = css`
-  background: #e4deca;
   margin-bottom: 40px;
+  margin-top: 20px;
+  color: #d7839b;
 `;
 
 type Props = {
@@ -63,16 +81,35 @@ export default function SinglePost(props: Props) {
 
           <meta name="description" content="SinglePost" />
         </Head>
-        <h1> Single Post Page</h1>
+
         <div css={postStyle}>
           <div css={imageStyle}>
             <img src={props.post.image} alt="uploaded file" />
+            <div css={likeCommentSection}>
+              <p>like</p>
+              <p>comment</p>
+            </div>
+            <div>
+              <p css={commentSectionStyle}>Comment Section:</p>
+            </div>
           </div>
 
           <div css={projectInfoStyle}>
             <div css={titleStyle}>{props.post.title}</div>
             <div css={descriptionStyle}>{props.post.description}</div>
+            <Image
+              alt="knitting needle icon"
+              src="/needle.png"
+              width="30px"
+              height="30px"
+            />
             <div css={needleSizeStyle}>{props.post.needleSize}</div>
+            <Image
+              alt="knitting needle icon"
+              src="/wool.png"
+              width="30px"
+              height="30px"
+            />
             <div css={yarnNameStyle}>{props.post.yarnName}</div>
           </div>
         </div>

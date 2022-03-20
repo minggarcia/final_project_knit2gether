@@ -29,6 +29,17 @@ const bioStyle = css`
   align-items: center;
 `;
 
+const addButtonStyle = css`
+  background: #d7839b;
+  color: white;
+  width: 100px;
+  height: 60px;
+  border-radius: 38px;
+  font-size: 18px;
+  border: transparent;
+  cursor: pointer;
+`;
+
 type Props = {
   user?: User;
   userObject: { username: string };
@@ -99,7 +110,7 @@ export default function UserProfile(props: Props) {
         <div>
           <Link href="/upload">
             <a>
-              <button>+</button>
+              <button css={addButtonStyle}>+</button>
             </a>
           </Link>
 
