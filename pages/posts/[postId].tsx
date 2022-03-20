@@ -1,7 +1,53 @@
+import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { getPostById, Post } from '../../util/database';
 import Layout from '../components/Layout';
+
+const postStyle = css`
+  display: flex;
+  justify-content: center;
+`;
+
+const imageStyle = css`
+  display: block;
+  margin-top: 50px;
+`;
+
+const projectInfoStyle = css`
+  border: solid 10px #957666;
+  border-radius: 66px;
+  width: 543px;
+  height: 600px;
+  margin: 30px 50px;
+  padding: 50px;
+  box-shadow: 5px 10px 20px #957666;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`;
+
+const titleStyle = css`
+  color: #779677;
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 40px;
+`;
+
+const descriptionStyle = css`
+  color: #d7839b;
+  margin-bottom: 40px;
+`;
+
+const needleSizeStyle = css`
+  background: #e4deca;
+  margin-bottom: 40px;
+`;
+
+const yarnNameStyle = css`
+  background: #e4deca;
+  margin-bottom: 40px;
+`;
 
 type Props = {
   userObject: { username: string };
@@ -18,11 +64,18 @@ export default function SinglePost(props: Props) {
           <meta name="description" content="SinglePost" />
         </Head>
         <h1> Single Post Page</h1>
-        <img src={props.post.image} alt="uploaded file" />
-        <div>{props.post.title}</div>
-        <div>{props.post.description}</div>
-        <div>{props.post.needleSize}</div>
-        <div>{props.post.yarnName}</div>
+        <div css={postStyle}>
+          <div css={imageStyle}>
+            <img src={props.post.image} alt="uploaded file" />
+          </div>
+
+          <div css={projectInfoStyle}>
+            <div css={titleStyle}>{props.post.title}</div>
+            <div css={descriptionStyle}>{props.post.description}</div>
+            <div css={needleSizeStyle}>{props.post.needleSize}</div>
+            <div css={yarnNameStyle}>{props.post.yarnName}</div>
+          </div>
+        </div>
       </Layout>
     </div>
   );

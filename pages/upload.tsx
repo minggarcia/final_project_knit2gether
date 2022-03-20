@@ -13,27 +13,29 @@ const h1Style = css`
   gap: 40px;
 `;
 
-// const inputFieldSectionStyles = css`
-//   display: block;
-//   position: right;
-//   margin-top: 120px;
+// const formStyle = css`
+//   display: flex;
 // `;
+
 const uploadStyle = css`
   border: solid 10px #957666;
   border-radius: 66px;
-  width: 543px;
-  height: 650px;
-  margin: 30px 50px;
+  width: 700px;
+  height: 750px;
   padding: 50px;
+  margin-top: 50px;
   box-shadow: 5px 10px 20px #957666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const uploadInfoStyle = css`
-  display: flex;
+  display: block;
+  align-items: flex-end;
+  justify-content: flex-end;
   flex-direction: column;
-  justify-content: center;
-  margin-top: 30px;
-  margin-left: 900px;
+  border: red solid 3px;
 `;
 
 const inputFieldStyle = css`
@@ -81,6 +83,7 @@ export default function Upload(props: Props) {
     formData.append('file', files[0]);
     formData.append('upload_preset', 'uploads');
     setLoading(true);
+
     const response = await fetch(
       `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
       {
@@ -143,51 +146,49 @@ export default function Upload(props: Props) {
                   <img
                     src={imageSource}
                     alt="preview"
-                    style={{ height: '200px' }}
+                    style={{ height: '700px', width: '700px' }}
                   />
                 )}
               </div>
+            </div>
 
-              <div css={uploadInfoStyle}>
-                <div>
-                  <input
-                    css={inputFieldStyle}
-                    placeholder="add title"
-                    value={title}
-                    onChange={(event) => setTitle(event.currentTarget.value)}
-                  />
-                </div>
-                <div>
-                  <input
-                    css={inputFieldStyle}
-                    placeholder="add description"
-                    value={description}
-                    onChange={(event) =>
-                      setDescription(event.currentTarget.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <input
-                    css={inputFieldStyle}
-                    placeholder="needle size"
-                    value={needleSize}
-                    onChange={(event) =>
-                      setNeedleSize(event.currentTarget.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <input
-                    css={inputFieldStyle}
-                    placeholder="add yarn name"
-                    value={yarnName}
-                    onChange={(event) => setYarnName(event.currentTarget.value)}
-                  />
-                </div>
-                <div>
-                  <button css={buttonStyle}>Upload</button>
-                </div>
+            <div css={uploadInfoStyle}>
+              <div>
+                <input
+                  css={inputFieldStyle}
+                  placeholder="add title"
+                  value={title}
+                  onChange={(event) => setTitle(event.currentTarget.value)}
+                />
+              </div>
+              <div>
+                <input
+                  css={inputFieldStyle}
+                  placeholder="add description"
+                  value={description}
+                  onChange={(event) =>
+                    setDescription(event.currentTarget.value)
+                  }
+                />
+              </div>
+              <div>
+                <input
+                  css={inputFieldStyle}
+                  placeholder="needle size"
+                  value={needleSize}
+                  onChange={(event) => setNeedleSize(event.currentTarget.value)}
+                />
+              </div>
+              <div>
+                <input
+                  css={inputFieldStyle}
+                  placeholder="add yarn name"
+                  value={yarnName}
+                  onChange={(event) => setYarnName(event.currentTarget.value)}
+                />
+              </div>
+              <div>
+                <button css={buttonStyle}>Upload</button>
               </div>
             </div>
           </form>
