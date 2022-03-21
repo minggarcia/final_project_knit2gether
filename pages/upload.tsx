@@ -10,7 +10,6 @@ const h1Style = css`
   justify-content: center;
   display: flex;
   color: #d7839b;
-  gap: 40px;
 `;
 
 const uploadLayout = css`
@@ -27,27 +26,54 @@ const layoutForm = css`
 `;
 
 const uploadStyle = css`
-  background: #e4deca;
   border-radius: 66px;
   height: 750px;
   padding: 50px;
   margin-top: 50px;
-  box-shadow: 5px 10px 20px #957666;
-  display: block;
-  width: 30vw;
-  align-items: center;
   justify-content: center;
-  display: flex;
+  display: block;
+  align-items: center;
 `;
 
+const uploadInputStyle = css`
+  ::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  ::before {
+    content: 'select an image';
+    display: inline-block;
+    background: #d7839b;
+    color: white;
+    border-radius: 50px;
+
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Syne;
+    font-weight: normal;
+    width: 150px;
+    height: 75px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+  :hover::before {
+    background: #779677;
+  }
+`;
 const uploadInfoStyle = css`
-  display: flex;
-  flex-direction: column;
-  margin: 50px 50px;
   border: solid 10px #957666;
   border-radius: 66px;
   width: 543px;
   height: 600px;
+  margin: 50px;
+  margin-left: 50px;
+  padding-top: 80px;
+  box-shadow: 5px 10px 20px #957666;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 const inputFieldStyle = css`
@@ -151,7 +177,11 @@ export default function Upload(props: Props) {
               }}
             >
               <div css={uploadStyle}>
-                <input type="file" onChange={uploadImage} />
+                <input
+                  css={uploadInputStyle}
+                  type="file"
+                  onChange={uploadImage}
+                />
 
                 <div>
                   {loading ? (

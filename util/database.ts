@@ -169,7 +169,7 @@ export async function deleteSessionByToken(token: string) {
   return session && camelCaseKeys(session);
 }
 
-// DELETE THE EXPIRED SESSION
+// DELETE THE EXPIRED SESSIONS
 
 export async function deleteExpiredSessions() {
   const sessions = await sql<Session[]>`
@@ -222,6 +222,7 @@ export async function createPost(
 export async function getPosts() {
   const posts = await sql<Post[]>`
   SELECT * FROM posts;`;
+
   return posts.map((post) => camelCaseKeys(post));
 }
 
@@ -235,7 +236,19 @@ export async function getPostById(id: number) {
    posts
    WHERE
    id = ${id}`;
+
   return camelCaseKeys(post);
 }
 
 // DELETE POST
+
+export async function deletePostByPostId(id: number) {
+  const [post] = await sql<[Post | undefined]>`
+  DELETE FROM
+  posts
+  WHERE
+  id = ${id}
+  RETURNING *
+  `;
+  return post && camelCaseKeys(post);
+}

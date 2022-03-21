@@ -13,8 +13,6 @@ const postStyle = css`
 const imageStyle = css`
   display: block;
   margin-top: 50px;
-
-  border-radius: 66px;
 `;
 
 const likeCommentSection = css`
