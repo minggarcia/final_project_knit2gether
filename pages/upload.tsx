@@ -13,29 +13,41 @@ const h1Style = css`
   gap: 40px;
 `;
 
-// const formStyle = css`
-//   display: flex;
-// `;
+const uploadLayout = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const layoutForm = css`
+  display: flex;
+  form {
+    display: flex;
+  }
+`;
 
 const uploadStyle = css`
-  border: solid 10px #957666;
+  background: #e4deca;
   border-radius: 66px;
-  width: 700px;
   height: 750px;
   padding: 50px;
   margin-top: 50px;
   box-shadow: 5px 10px 20px #957666;
-  display: flex;
-  justify-content: center;
+  display: block;
+  width: 30vw;
   align-items: center;
+  justify-content: center;
+  display: flex;
 `;
 
 const uploadInfoStyle = css`
-  display: block;
-  align-items: flex-end;
-  justify-content: flex-end;
+  display: flex;
   flex-direction: column;
-  border: red solid 3px;
+  margin: 50px 50px;
+  border: solid 10px #957666;
+  border-radius: 66px;
+  width: 543px;
+  height: 600px;
 `;
 
 const inputFieldStyle = css`
@@ -109,89 +121,96 @@ export default function Upload(props: Props) {
         <div>
           <h1 css={h1Style}>Upload you project</h1>
         </div>
-        <div>
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const uploadResponse = await fetch('/api/upload', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  image: imageSource,
-                  title: title,
-                  description: description,
-                  needleSize: needleSize,
-                  yarnName: yarnName,
-                }),
-              });
 
-              const uploadResponseBody =
-                (await uploadResponse.json()) as UploadResponseBody;
+        <div css={uploadLayout}>
+          <div css={layoutForm}>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const uploadResponse = await fetch('/api/upload', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    image: imageSource,
+                    title: title,
+                    description: description,
+                    needleSize: needleSize,
+                    yarnName: yarnName,
+                  }),
+                });
 
-              console.log('uploadResponseBody', uploadResponseBody);
+                const uploadResponseBody =
+                  (await uploadResponse.json()) as UploadResponseBody;
 
-              props.refreshUserProfile();
-              await router.push('/');
-            }}
-          >
-            <div css={uploadStyle}>
-              <input type="file" onChange={uploadImage} />
+                console.log('uploadResponseBody', uploadResponseBody);
 
-              <div>
-                {loading ? (
-                  <p>Loading ...</p>
-                ) : (
-                  <img
-                    src={imageSource}
-                    alt="preview"
-                    style={{ height: '700px', width: '700px' }}
+                props.refreshUserProfile();
+                await router.push('/');
+              }}
+            >
+              <div css={uploadStyle}>
+                <input type="file" onChange={uploadImage} />
+
+                <div>
+                  {loading ? (
+                    <div>
+                      <img src="/loading.gif" alt="loading" />
+                    </div>
+                  ) : (
+                    <img
+                      src={imageSource}
+                      alt="preview"
+                      style={{ height: '700px', width: '700px' }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div css={uploadInfoStyle}>
+                <div>
+                  <input
+                    css={inputFieldStyle}
+                    placeholder="add title"
+                    value={title}
+                    onChange={(event) => setTitle(event.currentTarget.value)}
                   />
-                )}
+                </div>
+                <div>
+                  <input
+                    css={inputFieldStyle}
+                    placeholder="add description"
+                    value={description}
+                    onChange={(event) =>
+                      setDescription(event.currentTarget.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <input
+                    css={inputFieldStyle}
+                    placeholder="needle size"
+                    value={needleSize}
+                    onChange={(event) =>
+                      setNeedleSize(event.currentTarget.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <input
+                    css={inputFieldStyle}
+                    placeholder="add yarn name"
+                    value={yarnName}
+                    onChange={(event) => setYarnName(event.currentTarget.value)}
+                  />
+                </div>
+                <div>
+                  <button css={buttonStyle}>Upload</button>
+                </div>
               </div>
-            </div>
-
-            <div css={uploadInfoStyle}>
-              <div>
-                <input
-                  css={inputFieldStyle}
-                  placeholder="add title"
-                  value={title}
-                  onChange={(event) => setTitle(event.currentTarget.value)}
-                />
-              </div>
-              <div>
-                <input
-                  css={inputFieldStyle}
-                  placeholder="add description"
-                  value={description}
-                  onChange={(event) =>
-                    setDescription(event.currentTarget.value)
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  css={inputFieldStyle}
-                  placeholder="needle size"
-                  value={needleSize}
-                  onChange={(event) => setNeedleSize(event.currentTarget.value)}
-                />
-              </div>
-              <div>
-                <input
-                  css={inputFieldStyle}
-                  placeholder="add yarn name"
-                  value={yarnName}
-                  onChange={(event) => setYarnName(event.currentTarget.value)}
-                />
-              </div>
-              <div>
-                <button css={buttonStyle}>Upload</button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </Layout>
     </div>

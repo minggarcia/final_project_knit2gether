@@ -116,22 +116,23 @@ export default function UserProfile(props: Props) {
 
           <div>
             <h2>projects</h2>
-            {/* {props.posts.map((post) => {
+            {props.posts.map((post) => {
               return (
                 <div key={`post-${post.id}`}>
                   <Link href={`/posts/${post.id}`}>
                     <a>
                       <Image
                         alt="uploaded post"
-                        src={props.posts.image}
+                        src={post.image}
                         width="100px"
                         height="100px"
                       />
+                      {console.log(props.posts)}
                     </a>
                   </Link>
                 </div>
               );
-            })} */}
+            })}
           </div>
         </div>
       </Layout>
@@ -179,6 +180,7 @@ export async function getServerSideProps(
   return {
     props: {
       user: user,
+      posts: posts,
     },
   };
 }
