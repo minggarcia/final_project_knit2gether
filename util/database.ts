@@ -184,18 +184,18 @@ export async function deleteExpiredSessions() {
 
 // CREATE PROFILE BIO
 
-export async function createProfileBio(userId: number, bio: string) {
-  const [profile] = await sql<[Profile]>`
+// export async function createProfileBio(userId: number, bio: string) {
+//   const [profile] = await sql<[Profile]>`
 
-  INSERT INTO profile
-  (bio, user_id)
-  VALUES
-  (${bio}, ${userId})
-  RETURNING
-  bio, id`;
+//   INSERT INTO profile
+//   (bio, user_id)
+//   VALUES
+//   (${bio}, ${userId})
+//   RETURNING
+//   bio, id`;
 
-  return camelCaseKeys(profile);
-}
+//   return camelCaseKeys(profile);
+// }
 
 // CREATE POST
 
@@ -212,7 +212,7 @@ export async function createPost(
   VALUES
   (${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
-  image, title, description, yarn_name, needle_size`;
+image, title, description, yarn_name, needle_size`;
 
   return camelCaseKeys(post);
 }
@@ -226,7 +226,7 @@ export async function getPosts() {
   return posts.map((post) => camelCaseKeys(post));
 }
 
-// GET SINGLE POST
+// GET SINGLE POST BY POST ID
 
 export async function getPostById(id: number) {
   const [post] = await sql<[Post]>`
@@ -238,6 +238,48 @@ export async function getPostById(id: number) {
    id = ${id}`;
 
   return camelCaseKeys(post);
+}
+
+// GET POST BY USER ID
+
+export async function getPostsByUserId(userId: number) {
+  if (!userId) return undefined;
+  const posts = await sql<[Post]>`
+  SELECT
+  *
+  FROM
+  posts
+  WHERE
+    user_id = ${userId}`;
+  return posts.map((post) => {
+    return camelCaseKeys(post);
+  });
+}
+
+// UPDATE POST
+
+export async function updatePostById(
+  id: number,
+  image: string,
+  title: string,
+  description: string,
+  needleSize: string,
+  yarnName: string,
+) {
+  const [post] = await sql<[Post | undefined]>`
+    UPDATE
+      posts
+    SET
+      image = ${image},
+      title = ${title},
+      description= ${description},
+      needle_size = ${needleSize},
+      yarn_name = ${yarnName}
+      WHERE
+      id = ${id}
+      RETURNING
+      *`;
+  return post && camelCaseKeys(post);
 }
 
 // DELETE POST

@@ -7,7 +7,6 @@ type UploadRequestBody = {
   description: string;
   needleSize: string;
   yarnName: string;
-  userId: number;
 };
 
 type UploadNextApiRequest = Omit<NextApiRequest, 'body'> & {
