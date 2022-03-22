@@ -59,7 +59,7 @@ const uploadInputStyle = css`
     display: flex;
   }
   :hover::before {
-    background: #779677;
+    border: #779677 solid 4px;
   }
 `;
 const uploadInfoStyle = css`
@@ -159,6 +159,7 @@ export default function Upload(props: Props) {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
+                    // userId: userId,
                     image: imageSource,
                     title: title,
                     description: description,

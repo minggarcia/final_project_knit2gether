@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { getPosts, getUserById, Post, User } from '../../util/database';
+import { getUserById, User } from '../../util/database';
 import Layout from '../components/Layout';
 
 const descriptionSectionStyle = css`
@@ -44,7 +43,6 @@ const addButtonStyle = css`
 type Props = {
   user?: User;
   userObject: { username: string };
-  posts: Post[];
 };
 
 export default function UserProfile(props: Props) {
@@ -116,23 +114,6 @@ export default function UserProfile(props: Props) {
 
           <div>
             <h2>projects</h2>
-            {props.posts.map((post) => {
-              return (
-                <div key={`post-${post.id}`}>
-                  <Link href={`/posts/${post.id}`}>
-                    <a>
-                      <Image
-                        alt="uploaded post"
-                        src={post.image}
-                        width="100px"
-                        height="100px"
-                      />
-                      {console.log(props.posts)}
-                    </a>
-                  </Link>
-                </div>
-              );
-            })}
           </div>
         </div>
       </Layout>
@@ -169,9 +150,6 @@ export async function getServerSideProps(
     };
   }
 
-  const posts = await getPosts();
-  console.log('database', posts);
-
   // Important:
   // - Always return an object from getServerSideProps
   // - Always return a key in that object that is
@@ -180,7 +158,6 @@ export async function getServerSideProps(
   return {
     props: {
       user: user,
-      posts: posts,
     },
   };
 }

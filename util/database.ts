@@ -126,7 +126,7 @@ export async function getUserByValidSessionToken(token: string | undefined) {
     FROM
       users,
       sessions
-      -- ADD TABLE COMMENTS
+      --,posts
       -- ,comments
       --, likes
     WHERE
@@ -200,6 +200,7 @@ export async function deleteExpiredSessions() {
 // CREATE POST
 
 export async function createPost(
+  // userId: number,
   image: string,
   title: string,
   description: string,
@@ -208,10 +209,16 @@ export async function createPost(
 ) {
   const [post] = await sql<[Post]>`
   INSERT INTO posts
-  (image, title, description, needle_size, yarn_name)
+  (
+   -- user_id,
+     image, title, description, needle_size, yarn_name)
   VALUES
-  (${image},${title}, ${description}, ${needleSize}, ${yarnName})
+  (
+  --  ${userId},
+
+    ${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
+-- user_id,
 image, title, description, yarn_name, needle_size`;
 
   return camelCaseKeys(post);

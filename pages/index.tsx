@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { getUserByValidSessionToken } from '../util/database';
+import Link from 'next/link';
+import { getPosts, getUserByValidSessionToken, Post } from '../util/database';
 import Layout from './components/Layout';
 
 const homepageStyle = css`
@@ -40,6 +41,7 @@ const newKnitsSection = css`
 `;
 type Props = {
   userObject: { username: string };
+  posts: Post[];
 };
 
 export default function Home(props: Props) {
@@ -69,6 +71,22 @@ export default function Home(props: Props) {
           <div css={newKnitsSection}>
             <h2>newest knitties from the community</h2>
           </div>
+          {props.posts.map((post) => {
+            return (
+              <div key={`post-${post.id}`}>
+                <Link href={`/posts/${post.id}`}>
+                  <a>
+                    <Image
+                      alt="uploaded post"
+                      src={post.image}
+                      width="100px"
+                      height="100px"
+                    />
+                  </a>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </Layout>
     </div>
@@ -76,6 +94,9 @@ export default function Home(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const posts = await getPosts();
+  console.log('database', posts);
+
   // 1. Get a user from the cookie sessionToken
   const token = context.req.cookies.sessionToken;
   const user = await getUserByValidSessionToken(token);
@@ -83,7 +104,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // 2. If there is a user, return that and render page
   if (user) {
     return {
-      props: { user: user },
+      props: {
+        user: user,
+        posts: posts,
+      },
     };
   }
 
