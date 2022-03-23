@@ -10,6 +10,10 @@ type PostRequestBody = {
   post: Post;
 };
 
+export type DeletePostResponseBody =
+  | { errors: { message: string }[] }
+  | { post: Post };
+
 type PostNextApiRequest = Omit<NextApiRequest, 'body'> & {
   body: PostRequestBody;
 };

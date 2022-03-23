@@ -46,6 +46,13 @@ export type Post = {
   yarnName: string;
 };
 
+export type Comment = {
+  id: number;
+  userId: number;
+  postId: number;
+  content: string;
+};
+
 // CREATE USER
 
 export async function createUser(username: string, passwordHash: string) {
@@ -126,10 +133,10 @@ export async function getUserByValidSessionToken(token: string | undefined) {
       users.username
     FROM
       users,
-      sessions
-      ,posts
-      -- ,comments
-      --, likes
+      sessions,
+      posts,
+      comments,
+      likes
     WHERE
       sessions.token = ${token} AND
       sessions.user_id = users.id AND
@@ -228,17 +235,11 @@ export async function createPost(
 ) {
   const [post] = await sql<[Post]>`
   INSERT INTO posts
-  (
-   user_id,
-     image, title, description, needle_size, yarn_name)
+  (user_id, image, title, description, needle_size, yarn_name)
   VALUES
-  (
-   ${userId},
-
-    ${image},${title}, ${description}, ${needleSize}, ${yarnName})
+  (${userId}, ${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
-user_id,
-image, title, description, yarn_name, needle_size`;
+  user_id, image, title, description, yarn_name, needle_size`;
 
   return camelCaseKeys(post);
 }
@@ -319,4 +320,35 @@ export async function deletePostByPostId(id: number) {
   RETURNING *
   `;
   return post && camelCaseKeys(post);
+}
+
+// CREATE COMMENTS
+
+export async function createComment(
+  userId: number,
+  postId: number,
+  content: string,
+) {
+  const [comment] = await sql<[Comment]>`
+INSERT INTO COMMENTS
+(user_id, post_id, content)
+VALUES
+(${userId}, ${postId}, ${content})
+RETURNING
+user_id, post_id, content
+`;
+  return camelCaseKeys(comment);
+}
+
+// READ COMMENTS BY ID
+
+export async function getCommentsById(id: number) {
+  const [comment] = await sql<[Comment]>`
+  SELECT
+  id, content
+  FROM
+  comments
+  where id = ${id}`;
+
+  return camelCaseKeys(comment);
 }

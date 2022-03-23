@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useState } from 'react';
 import { getPostById, Post } from '../../util/database';
 import Layout from '../components/Layout';
 
@@ -17,15 +18,25 @@ const imageStyle = css`
 
 const likeCommentSection = css`
   display: flex;
-  justify-content: flex-end;
-  gap: 40px;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  button {
+    background: transparent;
+    border: transparent;
+  }
+  span {
+    display: flex;
+    gap: 40px;
+  }
 `;
 
 const commentSectionStyle = css`
   color: #779677;
   display: flex;
   border-radius: 66px;
-  background: #e4deca; ;
+  background: #e4deca;
 `;
 
 const projectInfoStyle = css`
@@ -70,7 +81,30 @@ type Props = {
   post: Post;
 };
 
-export default function SinglePost(props: Props) {
+// export default function SinglePost(props: Props) {
+//   const [posts, setPosts] = useState<Post[]>([]);
+
+//   async function deletePost(id: number) {
+//     const deleteResponse = await fetch(`api/post/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         postId: id,
+//       }),
+//     });
+//     const deletePostResponseBody =
+//       (await deleteResponse.json()) as DeletePostResponseBody;
+//     console.log('deletePostResponseBody', deletePostResponseBody);
+
+//     const newPostList = posts.filter((post) => {
+//       return deletePostResponseBody.post.id !== post.id;
+//     });
+//     setPosts(newPostList);
+//   }
+
+
   return (
     <div>
       <Layout userObject={props.userObject}>
@@ -84,8 +118,21 @@ export default function SinglePost(props: Props) {
           <div css={imageStyle}>
             <img src={props.post.image} alt="uploaded file" />
             <div css={likeCommentSection}>
-              <p>like</p>
-              <p>comment</p>
+              <button
+                onClick={() => {
+                  deletePost(post.id).catch(() => {});
+                }}
+              >
+                <Image src="/delete.png" width="30px" height="30px" />
+              </button>
+              <span>
+                <button>
+                  <Image src="/comment.png" width="30px" height="30px" />
+                </button>
+                <button>
+                  <Image src="/liked.png" width="30px" height="30px" />
+                </button>
+              </span>
             </div>
             <div>
               <p css={commentSectionStyle}>Comment Section:</p>
