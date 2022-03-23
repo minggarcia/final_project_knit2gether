@@ -49,6 +49,7 @@ type Props = {
 
 export default function UserProfile(props: Props) {
   const [bio, setBio] = useState('');
+  const [profilePic, setProfilePic] = useState('');
 
   if (!props.user) {
     return (
@@ -82,20 +83,21 @@ export default function UserProfile(props: Props) {
             <div>knitties</div>
           </div>
         </div>
-        {/* <form
+        <form
           onSubmit={async (event) => {
             event.preventDefault();
-            const response = await fetch(`api/users/${id}`, {
+            const profileResponse = await fetch(`api/users/[userId]`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 bio: bio,
+                image: profilePic,
               }),
             });
-            const responseBody = await response.json();
-            console.log(responseBody);
+            const profileResponseBody = await profileResponse.json();
+            console.log(profileResponseBody);
             return;
           }}
         >
@@ -106,7 +108,7 @@ export default function UserProfile(props: Props) {
               onChange={(event) => setBio(event.currentTarget.value)}
             />
           </div>
-        </form> */}
+        </form>
         <div>
           <Link href="/upload">
             <a>

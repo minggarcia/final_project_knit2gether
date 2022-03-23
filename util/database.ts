@@ -134,9 +134,10 @@ export async function getUserByValidSessionToken(token: string | undefined) {
     FROM
       users,
       sessions,
-      posts,
-      comments,
-      likes
+      posts
+     -- comments,
+      -- likes
+
     WHERE
       sessions.token = ${token} AND
       sessions.user_id = users.id AND
@@ -214,7 +215,7 @@ export async function createProfileImageAndBio(
 export async function getProfileImageAndBioById(id: number) {
   const [profile] = await sql<[Profile]>`
   SELECT
-id, image, bio
+  id, image, bio
    FROM
    profile
    WHERE

@@ -81,29 +81,28 @@ type Props = {
   post: Post;
 };
 
-// export default function SinglePost(props: Props) {
-//   const [posts, setPosts] = useState<Post[]>([]);
+export default function SinglePost(props: Props) {
+  //   const [posts, setPosts] = useState<Post[]>([]);
 
-//   async function deletePost(id: number) {
-//     const deleteResponse = await fetch(`api/post/${id}`, {
-//       method: 'DELETE',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         postId: id,
-//       }),
-//     });
-//     const deletePostResponseBody =
-//       (await deleteResponse.json()) as DeletePostResponseBody;
-//     console.log('deletePostResponseBody', deletePostResponseBody);
+  //   async function deletePost(id: number) {
+  //     const deleteResponse = await fetch(`api/post/${id}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         postId: id,
+  //       }),
+  //     });
+  //     const deletePostResponseBody =
+  //       (await deleteResponse.json()) as DeletePostResponseBody;
+  //     console.log('deletePostResponseBody', deletePostResponseBody);
 
-//     const newPostList = posts.filter((post) => {
-//       return deletePostResponseBody.post.id !== post.id;
-//     });
-//     setPosts(newPostList);
-//   }
-
+  //     const newPostList = posts.filter((post) => {
+  //       return deletePostResponseBody.post.id !== post.id;
+  //     });
+  //     setPosts(newPostList);
+  //   }
 
   return (
     <div>
@@ -119,9 +118,9 @@ type Props = {
             <img src={props.post.image} alt="uploaded file" />
             <div css={likeCommentSection}>
               <button
-                onClick={() => {
-                  deletePost(post.id).catch(() => {});
-                }}
+              // onClick={() => {
+              //   deletePost(post.id).catch(() => {});
+              // }}
               >
                 <Image src="/delete.png" width="30px" height="30px" />
               </button>

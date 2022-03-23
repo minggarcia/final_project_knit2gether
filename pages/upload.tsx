@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getUserByValidSessionToken } from '../util/database';
+import { getUserByValidSessionToken, User } from '../util/database';
 import { UploadResponseBody } from './api/upload';
 import Layout from './components/Layout';
 
@@ -177,7 +177,7 @@ export default function Upload(props: Props) {
                 console.log('uploadResponseBody', uploadResponseBody);
 
                 props.refreshUserProfile();
-                await router.push('/');
+                await router.push(`/users/${props.userId}`);
               }}
             >
               <div css={uploadStyle}>
