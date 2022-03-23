@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { getUserByValidSessionToken } from '../util/database';
 import { UploadResponseBody } from './api/upload';
 import Layout from './components/Layout';
 
@@ -103,6 +105,7 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   cloudinaryAPI: string;
+  userId: number;
 };
 
 export default function Upload(props: Props) {
@@ -159,7 +162,7 @@ export default function Upload(props: Props) {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    // userId: userId,
+                    userId: props.userId,
                     image: imageSource,
                     title: title,
                     description: description,
@@ -248,12 +251,22 @@ export default function Upload(props: Props) {
   );
 }
 
-export function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cloudinaryAPI = process.env.CLOUDINARY_NAME;
+  const sessionToken = context.req.cookies.sessionToken;
+  const session = await getUserByValidSessionToken(sessionToken);
 
+  if (!session) {
+    return {
+      props: {
+        error: 'You need to be logged in!',
+      },
+    };
+  }
   return {
     props: {
       cloudinaryAPI,
+      userId: session.id,
     },
   };
 }

@@ -79,8 +79,8 @@ export default function Home(props: Props) {
                     <Image
                       alt="uploaded post"
                       src={post.image}
-                      width="100px"
-                      height="100px"
+                      width="400px"
+                      height="400px"
                     />
                   </a>
                 </Link>

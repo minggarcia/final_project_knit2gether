@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { getUserById, User } from '../../util/database';
+import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
 import Layout from '../components/Layout';
 
 const descriptionSectionStyle = css`
@@ -43,6 +44,7 @@ const addButtonStyle = css`
 type Props = {
   user?: User;
   userObject: { username: string };
+  posts: Post[];
 };
 
 export default function UserProfile(props: Props) {
@@ -80,10 +82,10 @@ export default function UserProfile(props: Props) {
             <div>knitties</div>
           </div>
         </div>
-        <form
+        {/* <form
           onSubmit={async (event) => {
             event.preventDefault();
-            const response = await fetch('api/profile', {
+            const response = await fetch(`api/users/${id}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +106,7 @@ export default function UserProfile(props: Props) {
               onChange={(event) => setBio(event.currentTarget.value)}
             />
           </div>
-        </form>
+        </form> */}
         <div>
           <Link href="/upload">
             <a>
@@ -114,6 +116,22 @@ export default function UserProfile(props: Props) {
 
           <div>
             <h2>projects</h2>
+            {props.posts.map((post) => {
+              return (
+                <div key={`post-${post.id}`}>
+                  <Link href={`/posts/${post.id}`}>
+                    <a>
+                      <Image
+                        alt="uploaded post"
+                        src={post.image}
+                        width="300px"
+                        height="300px"
+                      />
+                    </a>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Layout>
@@ -134,6 +152,7 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user?: User }>> {
   const userId = context.query.userId;
+  const posts = await getPostsByUserId(parseInt(userId));
 
   // User id is not correct type
   if (!userId || Array.isArray(userId)) {
@@ -158,6 +177,7 @@ export async function getServerSideProps(
   return {
     props: {
       user: user,
+      posts: posts,
     },
   };
 }

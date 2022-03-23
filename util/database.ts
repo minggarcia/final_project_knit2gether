@@ -32,6 +32,7 @@ type Session = {
 export type Profile = {
   id: number;
   userId: number;
+  image: string;
   bio: string;
 };
 
@@ -126,7 +127,7 @@ export async function getUserByValidSessionToken(token: string | undefined) {
     FROM
       users,
       sessions
-      --,posts
+      ,posts
       -- ,comments
       --, likes
     WHERE
@@ -184,23 +185,41 @@ export async function deleteExpiredSessions() {
 
 // CREATE PROFILE BIO
 
-// export async function createProfileBio(userId: number, bio: string) {
-//   const [profile] = await sql<[Profile]>`
+export async function createProfileImageAndBio(
+  userId: number,
+  image: string,
+  bio: string,
+) {
+  const [profile] = await sql<[Profile]>`
 
-//   INSERT INTO profile
-//   (bio, user_id)
-//   VALUES
-//   (${bio}, ${userId})
-//   RETURNING
-//   bio, id`;
+  INSERT INTO profile
+  (image, bio, user_id)
+  VALUES
+  (${image}, ${bio}, ${userId})
+  RETURNING
+  image, bio, id`;
 
-//   return camelCaseKeys(profile);
-// }
+  return camelCaseKeys(profile);
+}
+
+// READ bio and image of profile
+
+export async function getProfileImageAndBioById(id: number) {
+  const [profile] = await sql<[Profile]>`
+  SELECT
+id, image, bio
+   FROM
+   profile
+   WHERE
+   id = ${id}`;
+
+  return camelCaseKeys(profile);
+}
 
 // CREATE POST
 
 export async function createPost(
-  // userId: number,
+  userId: number,
   image: string,
   title: string,
   description: string,
@@ -210,15 +229,15 @@ export async function createPost(
   const [post] = await sql<[Post]>`
   INSERT INTO posts
   (
-   -- user_id,
+   user_id,
      image, title, description, needle_size, yarn_name)
   VALUES
   (
-  --  ${userId},
+   ${userId},
 
     ${image},${title}, ${description}, ${needleSize}, ${yarnName})
   RETURNING
--- user_id,
+user_id,
 image, title, description, yarn_name, needle_size`;
 
   return camelCaseKeys(post);
