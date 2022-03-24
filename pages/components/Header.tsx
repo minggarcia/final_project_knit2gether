@@ -37,6 +37,7 @@ const underHeaderContent = css`
 `;
 type Props = {
   userObject?: User;
+  userId: number;
 };
 export default function Header(props: Props) {
   return (
@@ -53,6 +54,9 @@ export default function Header(props: Props) {
           {/* <Link href=`/users/${user.id}`>
             <a>Profile</a>
           </Link> */}
+          <Link href="/upload">
+            <a>Upload</a>
+          </Link>
           {props.userObject ? (
             <Link href="/logout">
               <a>Logout</a>

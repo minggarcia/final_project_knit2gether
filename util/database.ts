@@ -343,13 +343,27 @@ user_id, post_id, content
 
 // READ COMMENTS BY ID
 
-export async function getCommentsById(id: number) {
+export async function getCommentsByPostId(id: number) {
   const [comment] = await sql<[Comment]>`
   SELECT
   id, content
   FROM
   comments
-  where id = ${id}`;
+  WHERE
+ post_id = ${id}`;
 
   return camelCaseKeys(comment);
+}
+
+// DELETE COMMENTS
+
+export async function deleteCommentById(id: number) {
+  const [deletedComment] = await sql<[Comment]>`
+  DELETE FROM
+  comments
+  WHERE
+  id = ${id}
+  RETURNING
+  *`;
+  return camelCaseKeys(deletedComment);
 }

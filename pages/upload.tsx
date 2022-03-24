@@ -177,6 +177,7 @@ export default function Upload(props: Props) {
                 console.log('uploadResponseBody', uploadResponseBody);
 
                 props.refreshUserProfile();
+                // redirect to user profile after upload
                 await router.push(`/users/${props.userId}`);
               }}
             >

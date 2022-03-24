@@ -20,7 +20,7 @@ type PostNextApiRequest = Omit<NextApiRequest, 'body'> & {
 
 export type PostResponseBody = { error: string } | { post: Post };
 
-export async function postHandler(
+export default async function postHandler(
   request: PostNextApiRequest,
   response: NextApiResponse<PostResponseBody>,
 ) {
@@ -37,23 +37,23 @@ export async function postHandler(
     return;
   }
 
-  if (request.method === 'GET') {
-    const post = await getPostById(postId);
+  // if (request.method === 'GET') {
+  //   const post = await getPostById(postId);
 
-    // check if there is no post with the id passed into the database
+  // check if there is no post with the id passed into the database
 
-    console.log(post);
+  // console.log(post);
 
-    if (!post) {
-      response.status(404).json({ error: 'post not found' });
-      return;
-    }
+  // if (!post) {
+  //   response.status(404).json({ error: 'post not found' });
+  //   return;
+  // }
 
-    // if the method is GET return the post with the matching id
+  // if the method is GET return the post with the matching id
 
-    response.status(200).json({ post: post });
-    return;
-  }
+  //   response.status(200).json({ post: post });
+  //   return;
+  // }
   // if the method id PUT update the post and response with the updated post
   else if (request.method === 'PUT') {
     // Access the body post from the request object
@@ -76,6 +76,7 @@ export async function postHandler(
     response.status(200).json({ post: updatedPost });
     return;
   } else if (request.method === 'DELETE') {
+    console.log('I JUST GOT A REQUEST');
     // if the method is DELETE, delete the animal matching the id and response with the deleted post
     const deletedPost = await deletePostByPostId(postId);
 

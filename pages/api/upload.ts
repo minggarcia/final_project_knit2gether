@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createPost, Post, User } from '../../util/database';
+import { createPost, Post } from '../../util/database';
 
 type UploadRequestBody = {
   userId: number;

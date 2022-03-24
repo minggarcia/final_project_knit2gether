@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
 import { getPostById, Post } from '../../util/database';
+import { DeletePostResponseBody } from '../api/posts/[postId]';
 import Layout from '../components/Layout';
 
 const postStyle = css`
@@ -21,10 +22,11 @@ const likeCommentSection = css`
   justify-content: space-between;
   margin-top: 10px;
   margin-right: 20px;
-  cursor: pointer;
+
   button {
     background: transparent;
     border: transparent;
+    cursor: pointer;
   }
   span {
     display: flex;
@@ -79,30 +81,34 @@ const yarnNameStyle = css`
 type Props = {
   userObject: { username: string };
   post: Post;
+  // postId: number;
 };
 
 export default function SinglePost(props: Props) {
-  //   const [posts, setPosts] = useState<Post[]>([]);
+  // const [comment, setComment] = useState('');
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  //   async function deletePost(id: number) {
-  //     const deleteResponse = await fetch(`api/post/${id}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         postId: id,
-  //       }),
-  //     });
-  //     const deletePostResponseBody =
-  //       (await deleteResponse.json()) as DeletePostResponseBody;
-  //     console.log('deletePostResponseBody', deletePostResponseBody);
+  async function deletePostByPostId(id: number) {
+    const deleteResponse = await fetch(`/api/posts/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: id,
+      }),
+    });
+    /*  const deletePostResponseBody =
+      (await deleteResponse.json()) as DeletePostResponseBody;
+    console.log('deletePostResponseBody', deletePostResponseBody);
 
-  //     const newPostList = posts.filter((post) => {
-  //       return deletePostResponseBody.post.id !== post.id;
-  //     });
-  //     setPosts(newPostList);
-  //   }
+    const newPostList = posts.filter((post) => {
+      return deletePostResponseBody.props.post.id !== post.id;
+    }); */
+    // setPosts(newPostList);
+
+    return deleteResponse;
+  }
 
   return (
     <div>
@@ -118,12 +124,14 @@ export default function SinglePost(props: Props) {
             <img src={props.post.image} alt="uploaded file" />
             <div css={likeCommentSection}>
               <button
-              // onClick={() => {
-              //   deletePost(post.id).catch(() => {});
-              // }}
+                onClick={() => {
+                  console.log('I was clicked');
+                  deletePostByPostId(props.post.id).catch(() => {});
+                }}
               >
                 <Image src="/delete.png" width="30px" height="30px" />
               </button>
+
               <span>
                 <button>
                   <Image src="/comment.png" width="30px" height="30px" />
@@ -135,6 +143,31 @@ export default function SinglePost(props: Props) {
             </div>
             <div>
               <p css={commentSectionStyle}>Comment Section:</p>
+              {/* <form
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  const commentResponse = await fetch('api/comment', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      comment: comment,
+                      userId: props.userId,
+                      postId: props.postId,
+                    }),
+                  });
+                  const newComment = await commentResponse.json();
+                  setComment('');
+                  console.log('new comment', newComment);
+                }}
+              >
+              <textarea
+                value={comment}
+                onChange={(event) => setComment(event.currentTarget.value)}
+              />
+              <button>add comment</button>
+              {/* </form> */}
             </div>
           </div>
 
@@ -171,11 +204,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: {} };
   }
 
+  // const comment = await getCommentsByPostId(parseInt(postId));
+
   const post = await getPostById(parseInt(postId));
 
   return {
     props: {
       post: post,
+      postId: postId,
+      // comment: comment,
     },
   };
 }
