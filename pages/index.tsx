@@ -39,6 +39,20 @@ const newKnitsSection = css`
     color: #779677;
   }
 `;
+
+const allPostsStyle = css`
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  Image {
+    display: flex;
+    flex-direction: row;
+  }
+  p {
+    text-decoration: none;
+  }
+`;
 type Props = {
   userObject: { username: string };
   posts: Post[];
@@ -73,7 +87,7 @@ export default function Home(props: Props) {
           </div>
           {props.posts.map((post) => {
             return (
-              <div key={`post-${post.id}`}>
+              <div key={`post-${post.id}`} css={allPostsStyle}>
                 <Link href={`/posts/${post.id}`}>
                   <a>
                     <Image
@@ -82,6 +96,7 @@ export default function Home(props: Props) {
                       width="400px"
                       height="400px"
                     />
+                    <p>{post.title}</p>
                   </a>
                 </Link>
               </div>

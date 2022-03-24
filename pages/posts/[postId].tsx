@@ -2,9 +2,8 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
-import { getPostById, Post } from '../../util/database';
-import { DeletePostResponseBody } from '../api/posts/[postId]';
+import { useRouter } from 'next/router';
+import { getPostById, Post, User } from '../../util/database';
 import Layout from '../components/Layout';
 
 const postStyle = css`
@@ -79,14 +78,16 @@ const yarnNameStyle = css`
 `;
 
 type Props = {
+  refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  // postId: number;
+  user: User;
 };
 
 export default function SinglePost(props: Props) {
   // const [comment, setComment] = useState('');
-  const [posts, setPosts] = useState<Post[]>([]);
+  // const [posts, setPosts] = useState<Post[]>([]);
+  const router = useRouter();
 
   async function deletePostByPostId(id: number) {
     const deleteResponse = await fetch(`/api/posts/${id}`, {
@@ -98,14 +99,9 @@ export default function SinglePost(props: Props) {
         postId: id,
       }),
     });
-    /*  const deletePostResponseBody =
-      (await deleteResponse.json()) as DeletePostResponseBody;
-    console.log('deletePostResponseBody', deletePostResponseBody);
 
-    const newPostList = posts.filter((post) => {
-      return deletePostResponseBody.props.post.id !== post.id;
-    }); */
-    // setPosts(newPostList);
+    props.refreshUserProfile();
+    await router.push(`/users/${props.user.id}`);
 
     return deleteResponse;
   }
@@ -212,7 +208,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       post: post,
       postId: postId,
-      // comment: comment,
     },
   };
 }
