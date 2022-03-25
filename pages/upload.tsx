@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getUserByValidSessionToken, User } from '../util/database';
+import { getUserByValidSessionToken} from '../util/database';
 import { UploadResponseBody } from './api/upload';
 import Layout from './components/Layout';
 

@@ -3,7 +3,9 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { getPostById, Post, User } from '../../util/database';
+import { useState } from 'react';
+import { getPostById, Post } from '../../util/database';
+import { PostResponseBody } from '../api/posts/[postId]';
 import Layout from '../components/Layout';
 
 const postStyle = css`
@@ -41,6 +43,12 @@ const commentSectionStyle = css`
 `;
 
 const projectInfoStyle = css`
+  button {
+    background: transparent;
+    border: transparent;
+    cursor: pointer;
+    justify-items: right;
+  }
   border: solid 10px #957666;
   border-radius: 66px;
   width: 543px;
@@ -81,12 +89,17 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  user: User;
 };
 
 export default function SinglePost(props: Props) {
   // const [comment, setComment] = useState('');
-  // const [posts, setPosts] = useState<Post[]>([]);
+
+  // state variables for editing inputs
+  // const [newTitle, setNewTitle] = useState('');
+  // const [newDescription, setNewDescription] = useState('');
+  // const [newNeedleSize, setNewNeedleSize] = useState('');
+  // const [newYarnName, setNewYarnName] = useState('');
+
   const router = useRouter();
 
   async function deletePostByPostId(id: number) {
@@ -101,10 +114,30 @@ export default function SinglePost(props: Props) {
     });
 
     props.refreshUserProfile();
-    await router.push(`/users/${props.user.id}`);
+    await router.push('/');
 
     return deleteResponse;
   }
+
+  // async function updatePostById(id: number) {
+  //   const updateResponse = await fetch(`/api/posts/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       post: {
+  //         title: newTitle,
+  //         description: newDescription,
+  //         needleSize: newNeedleSize,
+  //         yarnName: newYarnName,
+  //       },
+  //     }),
+  //   });
+  //   const updateResponseBody =
+  //     (await updateResponse.json()) as PostResponseBody;
+  //   console.log(updateResponseBody);
+  // }
 
   return (
     <div>
@@ -121,7 +154,6 @@ export default function SinglePost(props: Props) {
             <div css={likeCommentSection}>
               <button
                 onClick={() => {
-                  console.log('I was clicked');
                   deletePostByPostId(props.post.id).catch(() => {});
                 }}
               >
@@ -168,6 +200,14 @@ export default function SinglePost(props: Props) {
           </div>
 
           <div css={projectInfoStyle}>
+            <button>
+              <Image
+                alt="edit button"
+                src="/edit.png"
+                width="30px"
+                height="30px"
+              />
+            </button>
             <div css={titleStyle}>{props.post.title}</div>
             <div css={descriptionStyle}>{props.post.description}</div>
             <Image

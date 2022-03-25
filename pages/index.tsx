@@ -3,7 +3,12 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getPosts, getUserByValidSessionToken, Post } from '../util/database';
+import {
+  getPosts,
+  getUserByValidSessionToken,
+  Post,
+  User,
+} from '../util/database';
 import Layout from './components/Layout';
 
 const homepageStyle = css`
@@ -24,6 +29,11 @@ const h1Style = css`
   color: #d7839b;
   gap: 40px;
 `;
+const h2Style = css`
+  margin-top: 60px;
+  text-align: center;
+  color: #779677;
+`;
 
 const imageSectionStyle = css`
   display: flex;
@@ -34,25 +44,15 @@ const imageSectionStyle = css`
 const newKnitsSection = css`
   margin-top: 60px;
   text-align: center;
-
-  h2 {
-    color: #779677;
-  }
-`;
-
-const allPostsStyle = css`
-  margin-top: 40px;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  Image {
-    display: flex;
-    flex-direction: row;
-  }
+  display: flex;
   p {
+    color: #d7839b;
+    text-transform: none;
     text-decoration: none;
   }
 `;
+
 type Props = {
   userObject: { username: string };
   posts: Post[];
@@ -82,26 +82,30 @@ export default function Home(props: Props) {
               height="340"
             />
           </div>
-          <div css={newKnitsSection}>
-            <h2>newest knitties from the community</h2>
+          <div>
+            <h2 css={h2Style}>newest knitties from the community</h2>
           </div>
-          {props.posts.map((post) => {
-            return (
-              <div key={`post-${post.id}`} css={allPostsStyle}>
-                <Link href={`/posts/${post.id}`}>
-                  <a>
-                    <Image
-                      alt="uploaded post"
-                      src={post.image}
-                      width="400px"
-                      height="400px"
-                    />
-                    <p>{post.title}</p>
-                  </a>
-                </Link>
-              </div>
-            );
-          })}
+          <div css={newKnitsSection}>
+            {props.posts.map((post) => {
+              return (
+                <div key={`post-${post.id}`}>
+                  <div>
+                    <Link href={`/posts/${post.id}`}>
+                      <a>
+                        <Image
+                          alt="uploaded post"
+                          src={post.image}
+                          width="400px"
+                          height="400px"
+                        />
+                        <p>{post.title}</p>
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Layout>
     </div>

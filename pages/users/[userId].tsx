@@ -4,7 +4,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
+import {
+  getPostsByUserId,
+  getUserById,
+  getUserByValidSessionToken,
+  Post,
+  User,
+} from '../../util/database';
+import { ProfileResponseBody } from '../api/users/[userId]';
 import Layout from '../components/Layout';
 
 const descriptionSectionStyle = css`
@@ -41,15 +48,54 @@ const addButtonStyle = css`
   cursor: pointer;
 `;
 
+const h2Style = css`
+  text-align: center;
+  color: #779677;
+`;
+
+const imageSectionStyle = css`
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  p {
+    color: #d7839b;
+    text-transform: none;
+    text-decoration: none;
+  }
+`;
+
 type Props = {
   user?: User;
   userObject: { username: string };
   posts: Post[];
+  userId: number;
 };
 
 export default function UserProfile(props: Props) {
   const [bio, setBio] = useState('');
   const [profilePic, setProfilePic] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const uploadImage = async (event: any) => {
+    const files = event.currentTarget.files;
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    formData.append('upload_preset', 'profilepictures');
+    setLoading(true);
+
+    const response = await fetch(
+      `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+    const file = await response.json();
+
+    setProfilePic(file.secure_url);
+    setLoading(false);
+  };
 
   if (!props.user) {
     return (
@@ -84,31 +130,54 @@ export default function UserProfile(props: Props) {
           </div>
         </div>
         <form
-          onSubmit={async (event) => {
-            event.preventDefault();
-            const profileResponse = await fetch(`api/users/[userId]`, {
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const profileResponse = await fetch(`/api/users/${id}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                bio: bio,
+                userId: props.userId,
                 image: profilePic,
+                bio: bio,
               }),
             });
-            const profileResponseBody = await profileResponse.json();
-            console.log(profileResponseBody);
-            return;
+
+            const uploadResponseBody =
+              (await profileResponse.json()) as ProfileResponseBody;
+
+            console.log('uploadResponseBody', uploadResponseBody);
           }}
         >
-          <div css={bioStyle}>
-            bio description
-            <input
+          <div>
+            <input type="file" onChange={uploadImage} />
+            <div>
+              {loading ? (
+                <div>
+                  {' '}
+                  <img src="/loading.gif" alt="loading" />
+                </div>
+              ) : (
+                <img
+                  src={profilePic}
+                  alt="profile"
+                  height="400px"
+                  width="400px"
+                />
+              )}
+            </div>
+          </div>
+          <div>
+            <textarea
+              placeholder="add a bio"
               value={bio}
               onChange={(event) => setBio(event.currentTarget.value)}
             />
           </div>
+          <button>refresh profile</button>
         </form>
+
         <div>
           <Link href="/upload">
             <a>
@@ -117,18 +186,23 @@ export default function UserProfile(props: Props) {
           </Link>
 
           <div>
-            <h2>projects</h2>
+            <h2 css={h2Style}>my knitties</h2>
+          </div>
+          <div css={imageSectionStyle}>
             {props.posts.map((post) => {
               return (
                 <div key={`post-${post.id}`}>
                   <Link href={`/posts/${post.id}`}>
                     <a>
-                      <Image
-                        alt="uploaded post"
-                        src={post.image}
-                        width="300px"
-                        height="300px"
-                      />
+                      <div>
+                        <Image
+                          alt="uploaded post"
+                          src={post.image}
+                          width="300px"
+                          height="300px"
+                        />
+                      </div>
+                      <p>{post.title}</p>
                     </a>
                   </Link>
                 </div>
@@ -155,6 +229,15 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<{ user?: User }>> {
   const userId = context.query.userId;
   const posts = await getPostsByUserId(parseInt(userId));
+  // const sessionToken = context.req.cookies.sessionToken;
+  // const session = await getUserByValidSessionToken(sessionToken);
+  // if (!session) {
+  //   return {
+  //     props: {
+  //       error: 'You need to be logged in!',
+  //     },
+  //   };
+  // }
 
   // User id is not correct type
   if (!userId || Array.isArray(userId)) {
@@ -180,6 +263,7 @@ export async function getServerSideProps(
     props: {
       user: user,
       posts: posts,
+      // userId: session?.id,
     },
   };
 }
