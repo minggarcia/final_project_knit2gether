@@ -37,7 +37,6 @@ const underHeaderContent = css`
 `;
 type Props = {
   userObject?: User;
-  userId: number;
 };
 export default function Header(props: Props) {
   return (

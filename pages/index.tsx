@@ -3,12 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  getPosts,
-  getUserByValidSessionToken,
-  Post,
-  User,
-} from '../util/database';
+import { getPosts, getUserByValidSessionToken, Post } from '../util/database';
 import Layout from './components/Layout';
 
 const homepageStyle = css`
