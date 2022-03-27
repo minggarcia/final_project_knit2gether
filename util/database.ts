@@ -133,8 +133,9 @@ export async function getUserByValidSessionToken(token: string | undefined) {
       users.username
     FROM
       users,
-      sessions,
-      posts
+      sessions
+      --,
+      --posts
      -- comments,
       -- likes
 

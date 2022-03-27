@@ -2,9 +2,9 @@ exports.up = async (sql) => {
   await sql`
     CREATE TABLE comments (
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-			user_id integer REFERENCES users (id) ON DELETE CASCADE,
-			post_id integer REFERENCES posts (id) ON DELETE CASCADE,
-			content varchar(100)
+      user_id integer REFERENCES users (id) ON DELETE CASCADE,
+      post_id integer REFERENCES posts (id) ON DELETE CASCADE,
+      content varchar(100)
     );
   `;
 };
