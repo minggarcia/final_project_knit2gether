@@ -3,15 +3,9 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import {
-  getPostsByUserId,
-  getUserById,
-  getUserByValidSessionToken,
-  Post,
-  User,
-} from '../../util/database';
-import { ProfileResponseBody } from '../api/users/[userId]';
+// import { useState } from 'react';
+import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
+// import { ProfileResponseBody } from '../api/users/[userId]';
 import Layout from '../components/Layout';
 
 const descriptionSectionStyle = css`
@@ -30,12 +24,12 @@ const descriptionContentStyle = css`
   gap: 60px;
 `;
 
-const bioStyle = css`
-  color: #779677;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const bioStyle = css`
+//   color: #779677;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const addButtonStyle = css`
   background: #d7839b;
@@ -69,33 +63,34 @@ type Props = {
   user?: User;
   userObject: { username: string };
   posts: Post[];
-  userId: number;
+  // userId: number;
+  // cloudinaryAPI: string;
 };
 
 export default function UserProfile(props: Props) {
-  const [bio, setBio] = useState('');
-  const [profilePic, setProfilePic] = useState('');
-  const [loading, setLoading] = useState(false);
+  // const [bio, setBio] = useState('');
+  // const [profilePic, setProfilePic] = useState('');
+  // const [loading, setLoading] = useState(false);
 
-  const uploadImage = async (event: any) => {
-    const files = event.currentTarget.files;
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('upload_preset', 'profilepictures');
-    setLoading(true);
+  // const uploadImage = async (event: any) => {
+  //   const files = event.currentTarget.files;
+  //   const formData = new FormData();
+  //   formData.append('file', files[0]);
+  //   formData.append('upload_preset', 'profilepictures');
+  //   setLoading(true);
 
-    const response = await fetch(
-      `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
-      {
-        method: 'POST',
-        body: formData,
-      },
-    );
-    const file = await response.json();
+  //   const response = await fetch(
+  //     `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
+  //     {
+  //       method: 'POST',
+  //       body: formData,
+  //     },
+  //   );
+  //   const file = await response.json();
 
-    setProfilePic(file.secure_url);
-    setLoading(false);
-  };
+  //   setProfilePic(file.secure_url);
+  //   setLoading(false);
+  // };
 
   if (!props.user) {
     return (
@@ -129,7 +124,7 @@ export default function UserProfile(props: Props) {
             <div>knitties</div>
           </div>
         </div>
-        <form
+        {/* <form
           onSubmit={async (e) => {
             e.preventDefault();
             const profileResponse = await fetch(`/api/users/${id}`, {
@@ -176,7 +171,7 @@ export default function UserProfile(props: Props) {
             />
           </div>
           <button>refresh profile</button>
-        </form>
+        </form> */}
 
         <div>
           <Link href="/upload">

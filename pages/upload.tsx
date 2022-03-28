@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getUserByValidSessionToken} from '../util/database';
+import { getUserByValidSessionToken } from '../util/database';
 import { UploadResponseBody } from './api/upload';
 import Layout from './components/Layout';
 
@@ -16,32 +16,45 @@ const h1Style = css`
 
 const uploadLayout = css`
   display: flex;
-  flex-direction: row;
   justify-content: center;
 `;
 
 const layoutForm = css`
-  display: flex;
+  border: yellow solid 3px;
+
   form {
     display: flex;
+    gap: 300px;
   }
 `;
 
 const uploadStyle = css`
-  border-radius: 66px;
+  border: solid green 3px;
   height: 750px;
   padding: 50px;
-  margin-top: 50px;
   justify-content: center;
   display: block;
   align-items: center;
+  width: 300px;
 `;
 
 const uploadInputStyle = css`
+  border: red solid 2px;
+  margin-bottom: 30px;
+  width: 300px;
   ::-webkit-file-upload-button {
-    visibility: hidden;
+    background: #d7839b;
+    color: white;
+    font-family: Syne;
+    font-size: 18px;
+    border-radius: 50px;
+    width: 150px;
+    height: 75px;
+    outline: none;
+    cursor: pointer;
+    border: transparent;
   }
-  ::before {
+  /* ::before {
     content: 'select an image';
     display: inline-block;
     background: #d7839b;
@@ -58,8 +71,8 @@ const uploadInputStyle = css`
     height: 75px;
     align-items: center;
     justify-content: center;
-    display: flex;
-  }
+    display: flex; */
+  //  }
   :hover::before {
     border: #779677 solid 4px;
   }
@@ -85,6 +98,8 @@ const inputFieldStyle = css`
   margin-top: 30px;
   width: 240px;
   border: transparent;
+  font-family: Syne;
+  font-size: 15px;
 `;
 
 const buttonStyle = css`
@@ -197,7 +212,8 @@ export default function Upload(props: Props) {
                     <img
                       src={imageSource}
                       alt="preview"
-                      style={{ height: '700px', width: '700px' }}
+                      style={{ height: '600px', width: '600px' }}
+                      {...imageSource}
                     />
                   )}
                 </div>
@@ -213,7 +229,7 @@ export default function Upload(props: Props) {
                   />
                 </div>
                 <div>
-                  <input
+                  <textarea
                     css={inputFieldStyle}
                     placeholder="add description"
                     value={description}

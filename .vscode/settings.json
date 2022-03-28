@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "bestie",
+    "camelcase",
     "CLOUDINARY",
     "CLOURDINARY",
     "knitties",
@@ -8,6 +9,7 @@
     "PGHOST",
     "PGPASSWORD",
     "PGPORT",
-    "PGUSERNAME"
+    "PGUSERNAME",
+    "profilepictures"
   ]
 }

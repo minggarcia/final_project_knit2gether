@@ -2,6 +2,8 @@ import camelCaseKeys from 'camelcase-keys';
 import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 
+// setPostgresDefaultOnHeroku();
+
 config();
 
 // CONNECT TO POSTGRESQL
