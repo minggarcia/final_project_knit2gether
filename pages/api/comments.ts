@@ -5,6 +5,7 @@ type CommentRequestBody = {
   userId: number;
   postId: number;
   content: string;
+  username: string;
 };
 
 type CommentNextApiRequest = Omit<NextApiRequest, 'body'> & {
@@ -26,6 +27,7 @@ export async function commentsHandler(
       request.body.userId,
       request.body.postId,
       request.body.content,
+      request.body.username,
     );
     response.status(201).json({ comment: createdComment });
     return;

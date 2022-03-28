@@ -3,9 +3,14 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { getPostById, Post } from '../../util/database';
-import { PostResponseBody } from '../api/posts/[postId]';
+// import { useState } from 'react';
+import {
+  getCommentsByPostId,
+  getPostById,
+  Post,
+  // User,
+} from '../../util/database';
+// import { CommentResponseBody } from '../api/comments';
 import Layout from '../components/Layout';
 
 const postStyle = css`
@@ -89,10 +94,19 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
+  // user: User;
+  // postComments: {
+  //   id: number;
+  //   user_id: number;
+  //   post_id: number;
+  //   content: string;
+  //   username: string;
+  // }[];
 };
 
 export default function SinglePost(props: Props) {
-  // const [comment, setComment] = useState('');
+  // const [commentFromUser, setCommentFromUser] = useState<string>('');
+  // const [newComment, setNewComment] = useState(props.postComments);
 
   // state variables for editing inputs
   // const [newTitle, setNewTitle] = useState('');
@@ -162,40 +176,59 @@ export default function SinglePost(props: Props) {
 
               <span>
                 <button>
-                  <Image src="/comment.png" width="30px" height="30px" />
-                </button>
-                <button>
                   <Image src="/liked.png" width="30px" height="30px" />
                 </button>
               </span>
             </div>
             <div>
-              <p css={commentSectionStyle}>Comment Section:</p>
+              <p css={commentSectionStyle}>love letter section:</p>
               {/* <form
                 onSubmit={async (event) => {
                   event.preventDefault();
-                  const commentResponse = await fetch('api/comment', {
+                  const commentResponse = await fetch('api/comments', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                      comment: comment,
-                      userId: props.userId,
-                      postId: props.postId,
+                      content: commentFromUser,
+                      userId: props.user.id,
+                      postId: props.post.id,
+                      username: props.userObject.username,
                     }),
                   });
-                  const newComment = await commentResponse.json();
-                  setComment('');
-                  console.log('new comment', newComment);
+                  const commentResponseBody =
+                    (await commentResponse.json()) as CommentResponseBody;
+                  console.log('commentResponseBody', commentResponseBody);
+                  setCommentFromUser('');
+
+                  const newCommentsList = [newComment, commentResponseBody];
+                  setNewComment(newCommentsList);
+                  return;
                 }}
               >
-              <textarea
-                value={comment}
-                onChange={(event) => setComment(event.currentTarget.value)}
-              />
-              <button>add comment</button>
-              {/* </form> */}
+                <textarea
+                  value={commentFromUser}
+                  onChange={(event) =>
+                    setCommentFromUser(event.currentTarget.value)
+                  }
+                />
+                <button>
+                  <Image src="/comment.png" width="30px" height="30px" />
+                </button>
+              </form> */}
+
+              {/* {newComment.length === 0 ? (
+                <div> send a love letter </div>
+              ) : (
+                newComment.map((event) => {
+                  return (
+                    <div key={event.content}>
+                      {event.username}: {event.content}
+                    </div>
+                  );
+                })
+              )} */}
             </div>
           </div>
 
@@ -233,14 +266,13 @@ export default function SinglePost(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // id we get after the slash in the URL
-
   const postId = context.query.postId;
 
   if (!postId || Array.isArray(postId)) {
     return { props: {} };
   }
 
-  // const comment = await getCommentsByPostId(parseInt(postId));
+  const postComment = await getCommentsByPostId(parseInt(postId));
 
   const post = await getPostById(parseInt(postId));
 
@@ -248,6 +280,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       post: post,
       postId: postId,
+      postComment: postComment,
     },
   };
 }

@@ -41,7 +41,7 @@ const newKnitsSection = css`
   text-align: center;
   justify-content: center;
   display: flex;
-  p {
+  a {
     color: #d7839b;
     text-transform: none;
     text-decoration: none;

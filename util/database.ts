@@ -2,8 +2,6 @@ import camelCaseKeys from 'camelcase-keys';
 import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 
-// setPostgresDefaultOnHeroku();
-
 config();
 
 // CONNECT TO POSTGRESQL
@@ -332,14 +330,15 @@ export async function createComment(
   userId: number,
   postId: number,
   content: string,
+  username: string,
 ) {
   const [comment] = await sql<[Comment]>`
 INSERT INTO COMMENTS
-(user_id, post_id, content)
+(user_id, post_id, content, username)
 VALUES
-(${userId}, ${postId}, ${content})
+(${userId}, ${postId}, ${content}, ${username})
 RETURNING
-user_id, post_id, content
+user_id, post_id, content, username
 `;
   return camelCaseKeys(comment);
 }

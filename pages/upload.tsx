@@ -20,8 +20,6 @@ const uploadLayout = css`
 `;
 
 const layoutForm = css`
-  border: yellow solid 3px;
-
   form {
     display: flex;
     gap: 300px;
@@ -29,7 +27,6 @@ const layoutForm = css`
 `;
 
 const uploadStyle = css`
-  border: solid green 3px;
   height: 750px;
   padding: 50px;
   justify-content: center;
@@ -39,16 +36,15 @@ const uploadStyle = css`
 `;
 
 const uploadInputStyle = css`
-  border: red solid 2px;
   margin-bottom: 30px;
-  width: 300px;
+
   ::-webkit-file-upload-button {
     background: #d7839b;
     color: white;
     font-family: Syne;
     font-size: 18px;
     border-radius: 50px;
-    width: 150px;
+    width: 180px;
     height: 75px;
     outline: none;
     cursor: pointer;
@@ -124,7 +120,7 @@ type Props = {
 };
 
 export default function Upload(props: Props) {
-  const [imageSource, setImageSource] = useState('');
+  const [imageSource, setImageSource] = useState('/white.png');
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState('');
@@ -213,7 +209,6 @@ export default function Upload(props: Props) {
                       src={imageSource}
                       alt="preview"
                       style={{ height: '600px', width: '600px' }}
-                      {...imageSource}
                     />
                   )}
                 </div>

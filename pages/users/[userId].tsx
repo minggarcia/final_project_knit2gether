@@ -52,7 +52,7 @@ const imageSectionStyle = css`
   display: flex;
   justify-content: center;
   text-align: center;
-  p {
+  a {
     color: #d7839b;
     text-transform: none;
     text-decoration: none;
