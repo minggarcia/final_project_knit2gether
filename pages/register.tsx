@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createCsrfToken } from '../util/auth';
 import { getValidSessionByToken } from '../util/database';
+import { RegisterResponseBody } from './api/register';
 
 const registrationLayout = css`
   display: flex;
@@ -41,6 +42,7 @@ const inputFieldStyle = css`
   margin-top: 30px;
   width: 240px;
   border: transparent;
+  font-family: Syne;
 `;
 
 const createAccountButton = css`
@@ -113,11 +115,13 @@ export default function Register(props: Props) {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
   const router = useRouter();
+
   return (
     <div css={registrationLayout}>
       <Head>
         <title>Registration</title>
         <meta name="Registration" content="Register to knit2gether" />
+        <link rel="icon" href="/logo-pink.png" />
       </Head>
       <div css={registrationStyle}>
         <h1 css={h1Style}>Registration</h1>
@@ -136,7 +140,10 @@ export default function Register(props: Props) {
                   csrfToken: props.csrfToken,
                 }),
               });
-              const registerResponseBody = await registerResponse.json();
+              const registerResponseBody =
+                (await registerResponse.json()) as RegisterResponseBody;
+
+              console.log('REGISTER RESPONSE BODY', registerResponseBody);
               if ('errors' in registerResponseBody) {
                 setErrors(registerResponseBody.errors);
                 return;
@@ -164,6 +171,7 @@ export default function Register(props: Props) {
                 onChange={(event) => setPassword(event.currentTarget.value)}
               />
             </div>
+
             <div css={errorStyles}>
               {errors.map((error) => {
                 return (

@@ -3,12 +3,12 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-// import { useState } from 'react';
+import { useState } from 'react';
 import {
-  getCommentsByPostId,
+  // getCommentsByPostId,
   getPostById,
   Post,
-  // User,
+  User,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
 import Layout from '../components/Layout';
@@ -42,9 +42,23 @@ const likeCommentSection = css`
 
 const commentSectionStyle = css`
   color: #779677;
-  display: flex;
+  font-weight: bold;
+  display: block;
   border-radius: 66px;
+  margin-top: 40px;
   background: #e4deca;
+  padding: 30px;
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  textarea {
+    font-family: Syne;
+    width: 500px;
+    color: #d7839b;
+    margin-left: 30px;
+  }
 `;
 
 const projectInfoStyle = css`
@@ -94,7 +108,8 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  // user: User;
+  user: User;
+  // userId: number;
   // postComments: {
   //   id: number;
   //   user_id: number;
@@ -105,7 +120,7 @@ type Props = {
 };
 
 export default function SinglePost(props: Props) {
-  // const [commentFromUser, setCommentFromUser] = useState<string>('');
+  const [commentFromUser, setCommentFromUser] = useState<string>('');
   // const [newComment, setNewComment] = useState(props.postComments);
 
   // state variables for editing inputs
@@ -175,13 +190,16 @@ export default function SinglePost(props: Props) {
               </button>
 
               <span>
-                <button>
+                {/* <button>
                   <Image src="/liked.png" width="30px" height="30px" />
-                </button>
+                </button> */}
               </span>
             </div>
-            <div>
-              <p css={commentSectionStyle}>love letter section:</p>
+            <div css={commentSectionStyle}>
+              <p>
+                love letters{' '}
+                <Image src="/liked.png" width="30px" height="30px" /> :
+              </p>
               {/* <form
                 onSubmit={async (event) => {
                   event.preventDefault();
@@ -191,22 +209,24 @@ export default function SinglePost(props: Props) {
                       'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                      content: commentFromUser,
-                      userId: props.user.id,
+                      commentFromUser: commentFromUser,
+                      userId: props.userId,
                       postId: props.post.id,
                       username: props.userObject.username,
                     }),
                   });
                   const commentResponseBody =
                     (await commentResponse.json()) as CommentResponseBody;
+
                   console.log('commentResponseBody', commentResponseBody);
                   setCommentFromUser('');
 
                   const newCommentsList = [newComment, commentResponseBody];
-                  setNewComment(newCommentsList);
+
                   return;
                 }}
-              >
+              > */}
+              <div>
                 <textarea
                   value={commentFromUser}
                   onChange={(event) =>
@@ -216,7 +236,8 @@ export default function SinglePost(props: Props) {
                 <button>
                   <Image src="/comment.png" width="30px" height="30px" />
                 </button>
-              </form> */}
+              </div>
+              {/* </form> */}
 
               {/* {newComment.length === 0 ? (
                 <div> send a love letter </div>
@@ -257,6 +278,7 @@ export default function SinglePost(props: Props) {
               height="30px"
             />
             <div css={yarnNameStyle}>{props.post.yarnName}</div>
+            <div>made by {props.user}</div>
           </div>
         </div>
       </Layout>
@@ -272,7 +294,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: {} };
   }
 
-  const postComment = await getCommentsByPostId(parseInt(postId));
+  // const postComment = await getCommentsByPostId(Number(postId));
 
   const post = await getPostById(parseInt(postId));
 
@@ -280,7 +302,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       post: post,
       postId: postId,
-      postComment: postComment,
+      // postComment: postComment,
     },
   };
 }

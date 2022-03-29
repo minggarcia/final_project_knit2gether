@@ -300,7 +300,6 @@ export async function getPostById(id: number) {
 // GET POST BY USER ID
 
 export async function getPostsByUserId(userId: number) {
-  if (!userId) return undefined;
   const posts = await sql<[Post]>`
   SELECT
   *
@@ -360,7 +359,7 @@ export async function createComment(
   content: string,
   username: string,
 ) {
-  const [comment] = await sql<[Comment]>`
+  const [commentId] = await sql<[Comment]>`
 INSERT INTO COMMENTS
 (user_id, post_id, content, username)
 VALUES
@@ -368,21 +367,21 @@ VALUES
 RETURNING
 user_id, post_id, content, username
 `;
-  return camelCaseKeys(comment);
+  return camelCaseKeys(commentId);
 }
 
 // READ COMMENTS BY ID
 
 export async function getCommentsByPostId(id: number) {
-  const [comment] = await sql<[Comment]>`
+  const comments = await sql<[Comment]>`
   SELECT
-  id, content
+*
   FROM
   comments
   WHERE
  post_id = ${id}`;
 
-  return camelCaseKeys(comment);
+  return comments.map((comment) => camelCaseKeys(comment));
 }
 
 // DELETE COMMENTS

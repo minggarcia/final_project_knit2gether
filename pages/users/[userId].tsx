@@ -8,6 +8,13 @@ import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
 // import { ProfileResponseBody } from '../api/users/[userId]';
 import Layout from '../components/Layout';
 
+const h1Style = css`
+  margin-top: 30px;
+  justify-content: center;
+  display: flex;
+  color: #d7839b;
+  gap: 40px;
+`;
 const descriptionSectionStyle = css`
   display: flex;
   justify-content: center;
@@ -63,35 +70,9 @@ type Props = {
   user?: User;
   userObject: { username: string };
   posts: Post[];
-  // userId: number;
-  // cloudinaryAPI: string;
 };
 
 export default function UserProfile(props: Props) {
-  // const [bio, setBio] = useState('');
-  // const [profilePic, setProfilePic] = useState('');
-  // const [loading, setLoading] = useState(false);
-
-  // const uploadImage = async (event: any) => {
-  //   const files = event.currentTarget.files;
-  //   const formData = new FormData();
-  //   formData.append('file', files[0]);
-  //   formData.append('upload_preset', 'profilepictures');
-  //   setLoading(true);
-
-  //   const response = await fetch(
-  //     `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
-  //     {
-  //       method: 'POST',
-  //       body: formData,
-  //     },
-  //   );
-  //   const file = await response.json();
-
-  //   setProfilePic(file.secure_url);
-  //   setLoading(false);
-  // };
-
   if (!props.user) {
     return (
       <Layout userObject={props.userObject}>
@@ -114,64 +95,17 @@ export default function UserProfile(props: Props) {
             content={`Profile Page of ${props.user.username}`}
           />
         </Head>
-        {/* <div>
-          <h1>Welcome {props.user.username}!</h1>
-        </div> */}
+        <div>
+          <h1 css={h1Style}>Welcome back, {props.user.username} !</h1>{' '}
+          <Image src="/logo-pink.png" width="80px" height="80px" />
+          <Image src="/logo.png" width="80px" height="80px" />
+        </div>
         <div css={descriptionSectionStyle}>
           <div css={descriptionContentStyle}>
-            <div>'picture' </div>
             <div>{props.user.username}</div>
             <div>knitties</div>
           </div>
         </div>
-        {/* <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const profileResponse = await fetch(`/api/users/${id}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                userId: props.userId,
-                image: profilePic,
-                bio: bio,
-              }),
-            });
-
-            const uploadResponseBody =
-              (await profileResponse.json()) as ProfileResponseBody;
-
-            console.log('uploadResponseBody', uploadResponseBody);
-          }}
-        >
-          <div>
-            <input type="file" onChange={uploadImage} />
-            <div>
-              {loading ? (
-                <div>
-                  {' '}
-                  <img src="/loading.gif" alt="loading" />
-                </div>
-              ) : (
-                <img
-                  src={profilePic}
-                  alt="profile"
-                  height="400px"
-                  width="400px"
-                />
-              )}
-            </div>
-          </div>
-          <div>
-            <textarea
-              placeholder="add a bio"
-              value={bio}
-              onChange={(event) => setBio(event.currentTarget.value)}
-            />
-          </div>
-          <button>refresh profile</button>
-        </form> */}
 
         <div>
           <Link href="/upload">
@@ -221,9 +155,9 @@ export default function UserProfile(props: Props) {
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user?: User }>> {
+): Promise<GetServerSidePropsResult<{}>> {
   const userId = context.query.userId;
-  const posts = await getPostsByUserId(parseInt(userId));
+  const posts = await getPostsByUserId(Number(userId));
   // const sessionToken = context.req.cookies.sessionToken;
   // const session = await getUserByValidSessionToken(sessionToken);
   // if (!session) {

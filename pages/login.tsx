@@ -124,6 +124,7 @@ export default function Login(props: Props) {
       <Head>
         <title>Login</title>
         <meta name="Login" content="Log in into knit2gether" />
+        <link rel="icon" href="/logo-pink.png" />
       </Head>
       <div css={imageStyleSection}>
         <span>knit2gether</span>
