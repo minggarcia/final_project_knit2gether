@@ -10,3 +10,9 @@ module.exports = {
     domains: ['res.cloudinary.com'],
   },
 };
+module.exports = {
+  reactStrictMode: true,
+  experimental: {
+    emotion: true,
+  },
+};
