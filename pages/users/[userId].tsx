@@ -15,6 +15,14 @@ const h1Style = css`
   color: #d7839b;
   gap: 40px;
 `;
+
+const yarnBallsStyle = css`
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+`;
 const descriptionSectionStyle = css`
   display: flex;
   justify-content: center;
@@ -38,6 +46,12 @@ const descriptionContentStyle = css`
 //   align-items: center;
 // `;
 
+const uploadButtonStyle = css`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 150px;
+`;
+
 const addButtonStyle = css`
   background: #d7839b;
   color: white;
@@ -47,6 +61,7 @@ const addButtonStyle = css`
   font-size: 18px;
   border: transparent;
   cursor: pointer;
+  font-size: 40px;
 `;
 
 const h2Style = css`
@@ -96,9 +111,18 @@ export default function UserProfile(props: Props) {
           />
         </Head>
         <div>
-          <h1 css={h1Style}>Welcome back, {props.user.username} !</h1>{' '}
-          <Image src="/logo-pink.png" width="80px" height="80px" />
-          <Image src="/logo.png" width="80px" height="80px" />
+          <h1 css={h1Style}>Profile of {props.user.username} !</h1>{' '}
+          <div css={yarnBallsStyle}>
+            <Image src="/logo-pink.png" width="80px" height="80px" />
+            <Image src="/logo.png" width="80px" height="80px" />
+          </div>
+          <div css={uploadButtonStyle}>
+            <Link href="/upload">
+              <a>
+                <button css={addButtonStyle}>+</button>
+              </a>
+            </Link>
+          </div>
         </div>
         <div css={descriptionSectionStyle}>
           <div css={descriptionContentStyle}>
@@ -108,12 +132,6 @@ export default function UserProfile(props: Props) {
         </div>
 
         <div>
-          <Link href="/upload">
-            <a>
-              <button css={addButtonStyle}>+</button>
-            </a>
-          </Link>
-
           <div>
             <h2 css={h2Style}>my knitties</h2>
           </div>

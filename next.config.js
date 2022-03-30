@@ -6,13 +6,14 @@ const nextConfig = {
 module.exports = nextConfig;
 
 module.exports = {
-  images: {
-    domains: ['res.cloudinary.com'],
-  },
-};
-module.exports = {
   reactStrictMode: true,
   experimental: {
     emotion: true,
+  },
+};
+
+module.exports = {
+  images: {
+    domains: ['res.cloudinary.com'],
   },
 };

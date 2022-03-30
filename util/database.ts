@@ -241,17 +241,17 @@ export async function createProfileImageAndBio(
 
 // READ bio and image of profile
 
-export async function getProfileImageAndBioById(id: number) {
-  const [profile] = await sql<[Profile]>`
-  SELECT
-  id, image, bio
-   FROM
-   profile
-   WHERE
-   id = ${id}`;
+// export async function getProfileImageAndBioById(id: number) {
+//   const [profile] = await sql<[Profile]>`
+//   SELECT
+//   id, image, bio
+//    FROM
+//    profile
+//    WHERE
+//    id = ${id}`;
 
-  return camelCaseKeys(profile);
-}
+//   return camelCaseKeys(profile);
+// }
 
 // CREATE POST
 
@@ -311,6 +311,17 @@ export async function getPostsByUserId(userId: number) {
     return camelCaseKeys(post);
   });
 }
+
+// export async function getUsernameByPostId(id: number) {
+//   const [user] = await sql<[User | undefined]>`
+// SELECT
+//   id, username
+// FROM
+//   users
+// WHERE
+//   id=${id}`;
+//   return user && camelCaseKeys(user);
+// }
 
 // UPDATE POST
 

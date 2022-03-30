@@ -8,7 +8,7 @@ import {
   // getCommentsByPostId,
   getPostById,
   Post,
-  User,
+  // User,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
 import Layout from '../components/Layout';
@@ -108,7 +108,7 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  user: User;
+  // user: User;
   // userId: number;
   // postComments: {
   //   id: number;
@@ -278,7 +278,7 @@ export default function SinglePost(props: Props) {
               height="30px"
             />
             <div css={yarnNameStyle}>{props.post.yarnName}</div>
-            <div>made by {props.user}</div>
+            <div>made by </div>
           </div>
         </div>
       </Layout>
@@ -302,6 +302,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       post: post,
       postId: postId,
+
       // postComment: postComment,
     },
   };
