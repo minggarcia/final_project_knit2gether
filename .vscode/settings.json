@@ -10,6 +10,7 @@
     "PGPASSWORD",
     "PGPORT",
     "PGUSERNAME",
+    "profilepic",
     "profilepictures"
   ]
 }

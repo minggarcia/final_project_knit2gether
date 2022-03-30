@@ -8,48 +8,60 @@ import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
 // import { ProfileResponseBody } from '../api/users/[userId]';
 import Layout from '../components/Layout';
 
-const h1Style = css`
-  margin-top: 30px;
-  justify-content: center;
-  display: flex;
-  color: #d7839b;
-  gap: 40px;
-`;
+// const h1Style = css`
+//   margin-top: 30px;
+//   justify-content: center;
+//   display: flex;
+//   color: #d7839b;
+//   gap: 40px;
+// `;
 
-const yarnBallsStyle = css`
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-`;
+// const yarnBallsStyle = css`
+//   margin-top: 30px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 40px;
+// `;
 const descriptionSectionStyle = css`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   background: #e4deca;
   padding: 20px 50px;
   border-radius: 20px;
   margin: 80px 200px;
   color: #d7839b;
+  span {
+    color: #779677;
+  }
 `;
 
 const descriptionContentStyle = css`
   display: flex;
   flex-direction: row;
-  gap: 60px;
-`;
+  margin-top: 80px;
+  font-weight: bold;
+  line-height: 40px;
 
-// const bioStyle = css`
-//   color: #779677;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
+  textarea {
+    background: transparent;
+    border: transparent;
+    color: #779677;
+    font-family: Syne;
+    border-radius: 10px;
+    width: 300px;
+    height: 100px;
+    :hover {
+      border: 2px solid#779677;
+      border-radius: 10px;
+    }
+  }
+`;
 
 const uploadButtonStyle = css`
   display: flex;
   justify-content: flex-end;
-  margin-right: 150px;
+  margin-top: 180px;
 `;
 
 const addButtonStyle = css`
@@ -74,6 +86,8 @@ const imageSectionStyle = css`
   display: flex;
   justify-content: center;
   text-align: center;
+  gap: 40px;
+  flex-wrap: wrap;
   a {
     color: #d7839b;
     text-transform: none;
@@ -110,11 +124,20 @@ export default function UserProfile(props: Props) {
             content={`Profile Page of ${props.user.username}`}
           />
         </Head>
-        <div>
-          <h1 css={h1Style}>Profile of {props.user.username} !</h1>{' '}
-          <div css={yarnBallsStyle}>
-            <Image src="/logo-pink.png" width="80px" height="80px" />
-            <Image src="/logo.png" width="80px" height="80px" />
+
+        <div css={descriptionSectionStyle}>
+          <Image src="/profilepic.png" width="300px" height="300px" />
+          <div css={descriptionContentStyle}>
+            <div>
+              Profile of{' '}
+              <div>
+                <span>{props.user.username}</span>
+              </div>
+              <div>bio</div>
+              <div>
+                <textarea />
+              </div>
+            </div>
           </div>
           <div css={uploadButtonStyle}>
             <Link href="/upload">
@@ -124,17 +147,19 @@ export default function UserProfile(props: Props) {
             </Link>
           </div>
         </div>
-        <div css={descriptionSectionStyle}>
-          <div css={descriptionContentStyle}>
-            <div>{props.user.username}</div>
-            <div>knitties</div>
-          </div>
+        <div>
+          {/* <h1 css={h1Style}>Profile of {props.user.username} !</h1>{' '} */}
+          {/* <div css={yarnBallsStyle}>
+            <Image src="/logo-pink.png" width="80px" height="80px" />
+            <Image src="/logo.png" width="80px" height="80px" />
+          </div> */}
         </div>
 
         <div>
           <div>
             <h2 css={h2Style}>my knitties</h2>
           </div>
+
           <div css={imageSectionStyle}>
             {props.posts.map((post) => {
               return (

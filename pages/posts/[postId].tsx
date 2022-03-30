@@ -7,7 +7,9 @@ import { useState } from 'react';
 import {
   // getCommentsByPostId,
   getPostById,
+  getUsernameByPostId,
   Post,
+  User,
   // User,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
@@ -81,6 +83,7 @@ const projectInfoStyle = css`
 `;
 
 const titleStyle = css`
+  margin-top: 40px;
   color: #779677;
   font-size: 25px;
   font-weight: bold;
@@ -90,6 +93,7 @@ const titleStyle = css`
 const descriptionStyle = css`
   color: #d7839b;
   margin-bottom: 80px;
+  font-style: italic;
 `;
 
 const needleSizeStyle = css`
@@ -104,12 +108,17 @@ const yarnNameStyle = css`
   color: #d7839b;
 `;
 
+const madeByStyle = css`
+  color: #d7839b;
+`;
+
 type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
   // user: User;
   // userId: number;
+  // username: string;
   // postComments: {
   //   id: number;
   //   user_id: number;
@@ -254,14 +263,14 @@ export default function SinglePost(props: Props) {
           </div>
 
           <div css={projectInfoStyle}>
-            <button>
+            {/* <button>
               <Image
                 alt="edit button"
                 src="/edit.png"
                 width="30px"
                 height="30px"
               />
-            </button>
+            </button> */}
             <div css={titleStyle}>{props.post.title}</div>
             <div css={descriptionStyle}>{props.post.description}</div>
             <Image
@@ -278,7 +287,7 @@ export default function SinglePost(props: Props) {
               height="30px"
             />
             <div css={yarnNameStyle}>{props.post.yarnName}</div>
-            <div>made by </div>
+            <div css={madeByStyle}>made by </div>
           </div>
         </div>
       </Layout>
@@ -297,11 +306,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // const postComment = await getCommentsByPostId(Number(postId));
 
   const post = await getPostById(parseInt(postId));
+  // const username = await getUsernameByPostId(parseInt(postId));
 
   return {
     props: {
       post: post,
       postId: postId,
+      // username: username,
 
       // postComment: postComment,
     },

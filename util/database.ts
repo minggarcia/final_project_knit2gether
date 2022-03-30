@@ -312,15 +312,20 @@ export async function getPostsByUserId(userId: number) {
   });
 }
 
-// export async function getUsernameByPostId(id: number) {
-//   const [user] = await sql<[User | undefined]>`
+// export async function getUsernameByPostId(postId: number) {
+//   const [user] = await sql<[User]>`
 // SELECT
-//   id, username
+// users.id,
+// users.username
 // FROM
-//   users
+//   users,
+//   posts
 // WHERE
-//   id=${id}`;
-//   return user && camelCaseKeys(user);
+// post_id = ${postId} AND
+//  posts.user_id = users.id AND
+//  posts.user.username = users.username
+//   `;
+//   return user;
 // }
 
 // UPDATE POST

@@ -38,9 +38,11 @@ const imageSectionStyle = css`
 
 const newKnitsSection = css`
   margin-top: 60px;
+  gap: 40px;
   text-align: center;
   justify-content: center;
   display: flex;
+  flex-wrap: wrap;
   a {
     color: #d7839b;
     text-transform: none;
@@ -74,7 +76,7 @@ export default function Home(props: Props) {
               css={imageStyle}
               alt="knitting material laid out on a pink surface"
               src="/knit banner.jpeg"
-              width="1286"
+              width="1100"
               height="340"
             />
           </div>
@@ -91,8 +93,8 @@ export default function Home(props: Props) {
                         <Image
                           alt="uploaded post"
                           src={post.image}
-                          width="400px"
-                          height="400px"
+                          width="300px"
+                          height="300px"
                         />
                         <p>{post.title}</p>
                       </a>
