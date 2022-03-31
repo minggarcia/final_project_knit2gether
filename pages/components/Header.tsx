@@ -15,10 +15,10 @@ const headerStyle = css`
   padding: 20px 10px;
   box-shadow: 5px 10px 20px #779677;
 
-  cursor: pointer;
   a {
     color: #d7839b;
     text-decoration: none;
+    cursor: pointer;
   }
 `;
 

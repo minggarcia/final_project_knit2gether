@@ -72,6 +72,7 @@ export type Post = {
   description: string;
   needleSize: string;
   yarnName: string;
+  username: string;
 };
 
 export type Comment = {
@@ -222,22 +223,22 @@ export async function deleteExpiredSessions() {
 
 // CREATE PROFILE IMAGE AND BIO
 
-export async function createProfileImageAndBio(
-  userId: number,
-  image: string,
-  bio: string,
-) {
-  const [profile] = await sql<[Profile]>`
+// export async function createProfileImageAndBio(
+//   userId: number,
+//   image: string,
+//   bio: string,
+// ) {
+//   const [profile] = await sql<[Profile]>`
 
-  INSERT INTO profile
-  (image, bio, user_id)
-  VALUES
-  (${image}, ${bio}, ${userId})
-  RETURNING
-  image, bio, id`;
+//   INSERT INTO profile
+//   (image, bio, user_id)
+//   VALUES
+//   (${image}, ${bio}, ${userId})
+//   RETURNING
+//   image, bio, id`;
 
-  return camelCaseKeys(profile);
-}
+//   return camelCaseKeys(profile);
+// }
 
 // READ bio and image of profile
 
@@ -262,14 +263,15 @@ export async function createPost(
   description: string,
   needleSize: string,
   yarnName: string,
+  username: string,
 ) {
   const [post] = await sql<[Post]>`
   INSERT INTO posts
-  (user_id, image, title, description, needle_size, yarn_name)
+  (user_id, image, title, description, needle_size, yarn_name, username)
   VALUES
-  (${userId}, ${image},${title}, ${description}, ${needleSize}, ${yarnName})
+  (${userId}, ${image},${title}, ${description}, ${needleSize}, ${yarnName}, ${username})
   RETURNING
-  user_id, image, title, description, yarn_name, needle_size`;
+  user_id, image, title, description, yarn_name, needle_size, username`;
 
   return camelCaseKeys(post);
 }
@@ -288,7 +290,7 @@ export async function getPosts() {
 export async function getPostById(id: number) {
   const [post] = await sql<[Post]>`
   SELECT
-   id, image, title, description, needle_size, yarn_name, user_id
+   id, image, title, description, needle_size, yarn_name, user_id, username
    FROM
    posts
    WHERE

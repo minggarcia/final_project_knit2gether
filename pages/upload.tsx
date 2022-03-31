@@ -117,6 +117,7 @@ type Props = {
   userObject: { username: string };
   cloudinaryAPI: string;
   userId: number;
+  username: string;
 };
 
 export default function Upload(props: Props) {
@@ -179,6 +180,7 @@ export default function Upload(props: Props) {
                     description: description,
                     needleSize: needleSize,
                     yarnName: yarnName,
+                    username: props.username,
                   }),
                 });
 
@@ -279,6 +281,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       cloudinaryAPI,
       userId: session.id,
+      username: session.username,
     },
   };
 }

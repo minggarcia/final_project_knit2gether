@@ -7,7 +7,8 @@ exports.up = async (sql) => {
       title varchar(50) NOT NULL,
       description varchar(300),
       needle_size varchar(30) ,
-      yarn_name varchar(50)
+      yarn_name varchar(50),
+      username varchar(30) REFERENCES users(username) ON DELETE CASCADE
     );
   `;
 };

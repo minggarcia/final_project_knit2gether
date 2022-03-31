@@ -8,6 +8,7 @@ type UploadRequestBody = {
   description: string;
   needleSize: string;
   yarnName: string;
+  username: string;
 };
 
 type UploadNextApiRequest = Omit<NextApiRequest, 'body'> & {
@@ -31,6 +32,7 @@ export default async function uploadPostHandler(
       request.body.description,
       request.body.needleSize,
       request.body.yarnName,
+      request.body.username,
     );
 
     response.status(201).json({ post: post });

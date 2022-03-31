@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
@@ -107,15 +108,23 @@ const yarnNameStyle = css`
 `;
 
 const madeByStyle = css`
-  color: #d7839b;
+  border-radius: 15px;
+  padding: 20px;
+  background: #e4deca;
+  margin-top: 40px;
+  font-weight: bold;
+  a {
+    text-decoration: none;
+    text-transform: none;
+    color: #d7839b;
+  }
 `;
 
 type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  // userId: number;
-  // username: string;
+
   // postComments: {
   //   id: number;
   //   user_id: number;
@@ -124,6 +133,7 @@ type Props = {
   //   username: string;
   // }[];
   userId: number;
+  username: string;
 };
 
 export default function SinglePost(props: Props) {
@@ -287,7 +297,11 @@ export default function SinglePost(props: Props) {
               height="30px"
             />
             <div css={yarnNameStyle}>{props.post.yarnName}</div>
-            <div css={madeByStyle}>made by </div>
+            <div css={madeByStyle}>
+              <Link href={`/users/${props.post.userId}`}>
+                <a>made by {props.post.username}</a>
+              </Link>
+            </div>
           </div>
         </div>
       </Layout>
@@ -323,7 +337,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       post: post,
       postId: postId,
       userId: loggedInUser.id,
-      // username: username,
 
       // postComment: postComment,
     },
