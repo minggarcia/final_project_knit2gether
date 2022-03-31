@@ -158,7 +158,7 @@ export default function UserProfile(props: Props) {
 
         <div>
           <div>
-            <h2 css={h2Style}>my knitties</h2>
+            <h2 css={h2Style}>knitties</h2>
           </div>
 
           <div css={imageSectionStyle}>
@@ -202,6 +202,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<{}>> {
   const userId = context.query.userId;
   const posts = await getPostsByUserId(Number(userId));
+
   // const sessionToken = context.req.cookies.sessionToken;
   // const session = await getUserByValidSessionToken(sessionToken);
   // if (!session) {
@@ -236,6 +237,7 @@ export async function getServerSideProps(
     props: {
       user: user,
       posts: posts,
+
       // userId: session?.id,
     },
   };

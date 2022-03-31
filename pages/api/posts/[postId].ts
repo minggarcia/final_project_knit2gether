@@ -75,7 +75,7 @@ export default async function postHandler(
     response.status(200).json({ post: updatedPost });
     return;
   } else if (request.method === 'DELETE') {
-    // if the method is DELETE, delete the animal matching the id and response with the deleted post
+    // if the method is DELETE, delete the post matching the id and response with the deleted post
     const deletedPost = await deletePostByPostId(postId);
 
     if (!deletedPost) {

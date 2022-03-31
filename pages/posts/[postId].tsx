@@ -8,8 +8,6 @@ import {
   // getCommentsByPostId,
   getPostById,
   Post,
-  User,
-  // User,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
 import Layout from '../components/Layout';
@@ -115,7 +113,6 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  user: User;
   // userId: number;
   // username: string;
   // postComments: {
@@ -129,7 +126,6 @@ type Props = {
 
 export default function SinglePost(props: Props) {
   const [commentFromUser, setCommentFromUser] = useState<string>('');
-  const [isUserLogged, setIsUserLogged] = useState(props.userObject);
   // const [newComment, setNewComment] = useState(props.postComments);
 
   // state variables for editing inputs

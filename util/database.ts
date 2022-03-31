@@ -220,7 +220,7 @@ export async function deleteExpiredSessions() {
   return sessions.map((session) => camelCaseKeys(session));
 }
 
-// CREATE PROFILE BIO
+// CREATE PROFILE IMAGE AND BIO
 
 export async function createProfileImageAndBio(
   userId: number,
@@ -241,17 +241,17 @@ export async function createProfileImageAndBio(
 
 // READ bio and image of profile
 
-// export async function getProfileImageAndBioById(id: number) {
-//   const [profile] = await sql<[Profile]>`
-//   SELECT
-//   id, image, bio
-//    FROM
-//    profile
-//    WHERE
-//    id = ${id}`;
+export async function getProfileImageAndBioById(id: number) {
+  const [profile] = await sql<[Profile]>`
+  SELECT
+  id, image, bio
+   FROM
+   profile
+   WHERE
+   id = ${id}`;
 
-//   return camelCaseKeys(profile);
-// }
+  return camelCaseKeys(profile);
+}
 
 // CREATE POST
 
