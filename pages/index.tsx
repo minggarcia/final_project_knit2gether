@@ -25,7 +25,7 @@ const imageStyle = css`
 //   gap: 40px;
 // `;
 const h2Style = css`
-  margin-top: 60px;
+  margin-top: 100px;
   text-align: center;
   color: #779677;
 `;
@@ -37,7 +37,7 @@ const imageSectionStyle = css`
 `;
 
 const newKnitsSection = css`
-  margin-top: 60px;
+  margin-top: 40px;
   gap: 40px;
   text-align: center;
   justify-content: center;
