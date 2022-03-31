@@ -288,7 +288,7 @@ export async function getPosts() {
 export async function getPostById(id: number) {
   const [post] = await sql<[Post]>`
   SELECT
-   id, image, title, description, needle_size, yarn_name
+   id, image, title, description, needle_size, yarn_name, user_id
    FROM
    posts
    WHERE

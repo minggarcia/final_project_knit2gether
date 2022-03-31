@@ -4,7 +4,13 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 // import { useState } from 'react';
-import { getPostsByUserId, getUserById, Post, User } from '../../util/database';
+import {
+  getPostsByUserId,
+  getUserById,
+  getUserByValidSessionToken,
+  Post,
+  User,
+} from '../../util/database';
 // import { ProfileResponseBody } from '../api/users/[userId]';
 import Layout from '../components/Layout';
 
@@ -100,6 +106,7 @@ type Props = {
   user?: User;
   userObject: { username: string };
   posts: Post[];
+  userId: number;
 };
 
 export default function UserProfile(props: Props) {
@@ -141,11 +148,13 @@ export default function UserProfile(props: Props) {
             </div>
           </div>
           <div css={uploadButtonStyle}>
-            <Link href="/upload">
-              <a>
-                <button css={addButtonStyle}>+</button>
-              </a>
-            </Link>
+            {props.userId === props.user.id && (
+              <Link href="/upload">
+                <a>
+                  <button css={addButtonStyle}>+</button>
+                </a>
+              </Link>
+            )}
           </div>
         </div>
         <div>
@@ -203,16 +212,6 @@ export async function getServerSideProps(
   const userId = context.query.userId;
   const posts = await getPostsByUserId(Number(userId));
 
-  // const sessionToken = context.req.cookies.sessionToken;
-  // const session = await getUserByValidSessionToken(sessionToken);
-  // if (!session) {
-  //   return {
-  //     props: {
-  //       error: 'You need to be logged in!',
-  //     },
-  //   };
-  // }
-
   // User id is not correct type
   if (!userId || Array.isArray(userId)) {
     return { props: {} };
@@ -227,7 +226,16 @@ export async function getServerSideProps(
       props: {},
     };
   }
+  const sessionToken = context.req.cookies.sessionToken;
+  const loggedInUser = await getUserByValidSessionToken(sessionToken);
 
+  if (!loggedInUser) {
+    return {
+      props: {
+        error: 'You need to be logged in!',
+      },
+    };
+  }
   // Important:
   // - Always return an object from getServerSideProps
   // - Always return a key in that object that is
@@ -237,6 +245,7 @@ export async function getServerSideProps(
     props: {
       user: user,
       posts: posts,
+      userId: loggedInUser.id,
 
       // userId: session?.id,
     },

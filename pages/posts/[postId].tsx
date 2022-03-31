@@ -7,6 +7,7 @@ import { useState } from 'react';
 import {
   // getCommentsByPostId,
   getPostById,
+  getUserByValidSessionToken,
   Post,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
@@ -122,6 +123,7 @@ type Props = {
   //   content: string;
   //   username: string;
   // }[];
+  userId: number;
 };
 
 export default function SinglePost(props: Props) {
@@ -186,13 +188,15 @@ export default function SinglePost(props: Props) {
           <div css={imageStyle}>
             <img src={props.post.image} alt="uploaded file" />
             <div css={likeCommentSection}>
-              <button
-                onClick={() => {
-                  deletePostByPostId(props.post.id).catch(() => {});
-                }}
-              >
-                <Image src="/delete.png" width="30px" height="30px" />
-              </button>
+              {props.userId === props.post.userId && (
+                <button
+                  onClick={() => {
+                    deletePostByPostId(props.post.id).catch(() => {});
+                  }}
+                >
+                  <Image src="/delete.png" width="30px" height="30px" />
+                </button>
+              )}
 
               <span>
                 {/* <button>
@@ -294,6 +298,8 @@ export default function SinglePost(props: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // id we get after the slash in the URL
   const postId = context.query.postId;
+  const sessionToken = context.req.cookies.sessionToken;
+  const loggedInUser = await getUserByValidSessionToken(sessionToken);
 
   if (!postId || Array.isArray(postId)) {
     return { props: {} };
@@ -304,10 +310,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const post = await getPostById(parseInt(postId));
   // const username = await getUsernameByPostId(parseInt(postId));
 
+  if (!loggedInUser) {
+    return {
+      props: {
+        error: 'You need to be logged in!',
+      },
+    };
+  }
+
   return {
     props: {
       post: post,
       postId: postId,
+      userId: loggedInUser.id,
       // username: username,
 
       // postComment: postComment,
