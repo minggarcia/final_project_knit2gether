@@ -223,22 +223,22 @@ export async function deleteExpiredSessions() {
 
 // CREATE PROFILE IMAGE AND BIO
 
-// export async function createProfileImageAndBio(
-//   userId: number,
-//   image: string,
-//   bio: string,
-// ) {
-//   const [profile] = await sql<[Profile]>`
+export async function createProfileImageAndBio(
+  userId: number,
+  image: string,
+  bio: string,
+) {
+  const [profile] = await sql<[Profile]>`
 
-//   INSERT INTO profile
-//   (image, bio, user_id)
-//   VALUES
-//   (${image}, ${bio}, ${userId})
-//   RETURNING
-//   image, bio, id`;
+  INSERT INTO profile
+  (image, bio, user_id)
+  VALUES
+  (${image}, ${bio}, ${userId})
+  RETURNING
+  image, bio, id`;
 
-//   return camelCaseKeys(profile);
-// }
+  return camelCaseKeys(profile);
+}
 
 // READ bio and image of profile
 
