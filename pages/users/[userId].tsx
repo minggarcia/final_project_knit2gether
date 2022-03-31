@@ -33,6 +33,7 @@ const descriptionSectionStyle = css`
   color: #d7839b;
   span {
     color: #779677;
+    font-weight: normal;
   }
 `;
 
@@ -61,7 +62,7 @@ const descriptionContentStyle = css`
 const uploadButtonStyle = css`
   display: flex;
   justify-content: flex-end;
-  margin-top: 180px;
+  margin-top: 250px;
 `;
 
 const addButtonStyle = css`

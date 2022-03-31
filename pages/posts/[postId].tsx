@@ -7,7 +7,6 @@ import { useState } from 'react';
 import {
   // getCommentsByPostId,
   getPostById,
-  getUsernameByPostId,
   Post,
   User,
   // User,
@@ -116,7 +115,7 @@ type Props = {
   refreshUserProfile: () => void;
   userObject: { username: string };
   post: Post;
-  // user: User;
+  user: User;
   // userId: number;
   // username: string;
   // postComments: {
@@ -130,6 +129,7 @@ type Props = {
 
 export default function SinglePost(props: Props) {
   const [commentFromUser, setCommentFromUser] = useState<string>('');
+  const [isUserLogged, setIsUserLogged] = useState(props.userObject);
   // const [newComment, setNewComment] = useState(props.postComments);
 
   // state variables for editing inputs
@@ -181,7 +181,7 @@ export default function SinglePost(props: Props) {
     <div>
       <Layout userObject={props.userObject}>
         <Head>
-          <title>My Post</title>
+          <title> Post</title>
 
           <meta name="description" content="SinglePost" />
         </Head>

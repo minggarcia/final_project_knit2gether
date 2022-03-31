@@ -61,6 +61,7 @@ const inputFieldStyle = css`
   margin-top: 30px;
   width: 240px;
   border: transparent;
+  font-family: Syne;
 `;
 
 const nextButton = css`
