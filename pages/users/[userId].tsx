@@ -208,6 +208,7 @@ export default function UserProfile(props: Props) {
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
+  // eslint-disable-next-line @typescript-eslint/ban-types
 ): Promise<GetServerSidePropsResult<{}>> {
   const userId = context.query.userId;
   const posts = await getPostsByUserId(Number(userId));
