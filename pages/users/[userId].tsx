@@ -3,7 +3,6 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-// import { useState } from 'react';
 import {
   getPostsByUserId,
   getUserById,
@@ -11,24 +10,9 @@ import {
   Post,
   User,
 } from '../../util/database';
-// import { ProfileResponseBody } from '../api/users/[userId]';
+
 import Layout from '../components/Layout';
 
-// const h1Style = css`
-//   margin-top: 30px;
-//   justify-content: center;
-//   display: flex;
-//   color: #d7839b;
-//   gap: 40px;
-// `;
-
-// const yarnBallsStyle = css`
-//   margin-top: 30px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   gap: 40px;
-// `;
 const descriptionSectionStyle = css`
   display: flex;
   justify-content: space-between;
@@ -37,6 +21,7 @@ const descriptionSectionStyle = css`
   border-radius: 20px;
   margin: 80px 200px;
   color: #d7839b;
+  box-shadow: 5px 10px 20px #e4deca;
   span {
     color: #779677;
     font-weight: normal;
@@ -50,7 +35,6 @@ const descriptionSectionStyle = css`
 
 const descriptionContentStyle = css`
   display: flex;
-  /* flex-direction: row; */
 
   font-weight: bold;
   line-height: 40px;

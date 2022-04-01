@@ -81,7 +81,9 @@ export type Comment = {
   id: number;
   userId: number;
   postId: number;
-  content: string;
+  comment: string;
+  username: string;
+  image: string;
 };
 
 // CREATE USER
@@ -232,39 +234,6 @@ export async function deleteExpiredSessions() {
   return sessions.map((session) => camelCaseKeys(session));
 }
 
-// CREATE PROFILE IMAGE AND BIO
-
-// export async function createProfileImageAndBio(
-//   userId: number,
-//   image: string,
-//   bio: string,
-// ) {
-//   const [profile] = await sql<[Profile]>`
-
-//   INSERT INTO profile
-//   (image, bio, user_id)
-//   VALUES
-//   (${image}, ${bio}, ${userId})
-//   RETURNING
-//   image, bio, id`;
-
-//   return camelCaseKeys(profile);
-// }
-
-// // READ bio and image of profile
-
-// export async function getProfileImageAndBioById(id: number) {
-//   const [profile] = await sql<[Profile]>`
-//   SELECT
-//   id, image, bio
-//    FROM
-//    profile
-//    WHERE
-//    id = ${id}`;
-
-//   return camelCaseKeys(profile);
-// }
-
 // CREATE POST
 
 export async function createPost(
@@ -369,16 +338,17 @@ export async function deletePostByPostId(id: number) {
 export async function createComment(
   userId: number,
   postId: number,
-  content: string,
+  comment: string,
   username: string,
+  image: string,
 ) {
   const [commentId] = await sql<[Comment]>`
 INSERT INTO COMMENTS
-(user_id, post_id, content, username)
+(user_id, post_id, comment, username, image)
 VALUES
-(${userId}, ${postId}, ${content}, ${username})
+(${userId}, ${postId}, ${comment}, ${username}, ${image})
 RETURNING
-user_id, post_id, content, username
+user_id, post_id, comment, username, image
 `;
   return camelCaseKeys(commentId);
 }

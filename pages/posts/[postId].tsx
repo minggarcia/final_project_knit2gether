@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
+  getCommentsByPostId,
   // getCommentsByPostId,
   getPostById,
   getUserByValidSessionToken,
   Post,
 } from '../../util/database';
 // import { CommentResponseBody } from '../api/comments';
+
 import Layout from '../components/Layout';
 
 const postStyle = css`
@@ -60,6 +62,12 @@ const commentSectionStyle = css`
     color: #d7839b;
     margin-left: 30px;
   }
+`;
+
+const commentImageStyle = css`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 `;
 
 const projectInfoStyle = css`
@@ -122,23 +130,24 @@ const madeByStyle = css`
 
 type Props = {
   refreshUserProfile: () => void;
-  userObject: { username: string };
+  userObject: { username: string; image: string };
   post: Post;
 
-  // postComments: {
-  //   id: number;
-  //   user_id: number;
-  //   post_id: number;
-  //   content: string;
-  //   username: string;
-  // }[];
+  postComments: {
+    id: number;
+    user_id: number;
+    post_id: number;
+    comment: string;
+    username: string;
+    image: string;
+  }[];
   userId: number;
   username: string;
 };
 
 export default function SinglePost(props: Props) {
   const [commentFromUser, setCommentFromUser] = useState<string>('');
-  // const [newComment, setNewComment] = useState(props.postComments);
+  const [newComment, setNewComment] = useState(props.postComments);
 
   // state variables for editing inputs
   // const [newTitle, setNewTitle] = useState('');
@@ -219,10 +228,10 @@ export default function SinglePost(props: Props) {
                 love letters{' '}
                 <Image src="/liked.png" width="30px" height="30px" /> :
               </p>
-              {/* <form
+              <form
                 onSubmit={async (event) => {
                   event.preventDefault();
-                  const commentResponse = await fetch('api/comments', {
+                  const commentResponse = await fetch('/api/comments', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -232,43 +241,45 @@ export default function SinglePost(props: Props) {
                       userId: props.userId,
                       postId: props.post.id,
                       username: props.userObject.username,
+                      image: props.userObject.image,
                     }),
                   });
-                  const commentResponseBody =
-                    (await commentResponse.json()) as CommentResponseBody;
+                  const commentResponseBody = await commentResponse.json();
 
                   console.log('commentResponseBody', commentResponseBody);
                   setCommentFromUser('');
 
-                  const newCommentsList = [newComment, commentResponseBody];
+                  const newCommentsList = [...newComment, commentResponseBody];
+                  setNewComment(newCommentsList);
 
                   return;
                 }}
-              > */}
-              <div>
-                <textarea
-                  value={commentFromUser}
-                  onChange={(event) =>
-                    setCommentFromUser(event.currentTarget.value)
-                  }
-                />
-                <button>
-                  <Image src="/comment.png" width="30px" height="30px" />
-                </button>
-              </div>
-              {/* </form> */}
+              >
+                <div>
+                  <textarea
+                    value={commentFromUser}
+                    onChange={(event) =>
+                      setCommentFromUser(event.currentTarget.value)
+                    }
+                  />
+                  <button>
+                    <Image src="/comment.png" width="30px" height="30px" />
+                  </button>
+                </div>
+              </form>
 
-              {/* {newComment.length === 0 ? (
-                <div> send a love letter </div>
+              {newComment.length === 0 ? (
+                <div> </div>
               ) : (
-                newComment.map((event) => {
+                newComment.map((e) => {
                   return (
-                    <div key={event.content}>
-                      {event.username}: {event.content}
+                    <div key={e.comment}>
+                      <img src={e.image} css={commentImageStyle} alt="user" />
+                      {e.username}: {e.comment}
                     </div>
                   );
                 })
-              )} */}
+              )}
             </div>
           </div>
 
@@ -332,13 +343,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
+  const postComments = await getCommentsByPostId(parseInt(postId));
+
   return {
     props: {
       post: post,
       postId: postId,
       userId: loggedInUser.id,
 
-      // postComment: postComment,
+      postComments: postComments,
     },
   };
 }

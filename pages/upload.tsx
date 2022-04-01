@@ -37,19 +37,6 @@ const uploadStyle = css`
 
 const uploadInputStyle = css`
   margin-bottom: 30px;
-
-  ::-webkit-file-upload-button {
-    background: #d7839b;
-    color: white;
-    font-family: Syne;
-    font-size: 18px;
-    border-radius: 50px;
-    width: 180px;
-    height: 75px;
-    outline: none;
-    cursor: pointer;
-    border: transparent;
-  }
   /* ::before {
     content: 'select an image';
     display: inline-block;
@@ -67,8 +54,22 @@ const uploadInputStyle = css`
     height: 75px;
     align-items: center;
     justify-content: center;
-    display: flex; */
-  //  }
+    display: flex;
+  } */
+  ::-webkit-file-upload-button {
+    background: #d7839b;
+    color: white;
+    font-family: Syne;
+    font-size: 18px;
+    border-radius: 50px;
+    width: 180px;
+    height: 75px;
+    outline: none;
+    cursor: pointer;
+    border: transparent;
+    /* display: none; */
+  }
+
   :hover::before {
     border: #779677 solid 4px;
   }

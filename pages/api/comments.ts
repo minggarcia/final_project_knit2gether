@@ -1,38 +1,38 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Comment, createComment, deleteCommentById } from '../../util/database';
+import { createComment, deleteCommentById } from '../../util/database';
 
-type CommentRequestBody = {
-  userId: number;
-  postId: number;
-  content: string;
-  username: string;
-};
+// type CommentRequestBody = {
+//   userId: number;
+//   postId: number;
+//   comment: string;
+//   username: string;
+//   image: string;
+// };
 
-type CommentNextApiRequest = Omit<NextApiRequest, 'body'> & {
-  body: CommentRequestBody;
-};
+// type CommentNextApiRequest = Omit<NextApiRequest, 'body'> & {
+//   body: CommentRequestBody;
+// };
 
-export type CommentResponseBody =
-  | { errors: { message: string }[] }
-  | { comment: Comment };
+// export type CommentResponseBody =
+//   | { errors: { message: string }[] }
+//   | { comment: Comment };
 
-export async function commentsHandler(
-  request: CommentNextApiRequest,
-  response: NextApiResponse<CommentResponseBody>,
+export default async function commentsHandler(
+  request: NextApiRequest,
+  response: NextApiResponse,
 ) {
-  const commentId = Number(request.query.commentId);
-
   if (request.method === 'POST') {
     const createdComment = await createComment(
       request.body.userId,
       request.body.postId,
-      request.body.content,
+      request.body.commentFromUser,
       request.body.username,
+      request.body.image,
     );
     response.status(201).json({ comment: createdComment });
     return;
   }
-
+  const commentId = Number(request.query.commentId);
   if (request.method === 'DELETE') {
     const deletedComment = await deleteCommentById(commentId);
     response.status(201).json({ comment: deletedComment });
