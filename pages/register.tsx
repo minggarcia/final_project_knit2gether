@@ -17,8 +17,8 @@ const registrationStyle = css`
   border: solid 10px #957666;
   border-radius: 66px;
   width: 543px;
-  height: 650px;
-  margin: 30px 50px;
+  height: 800px;
+  margin: 10px 50px;
   padding: 50px;
   box-shadow: 5px 10px 20px #957666;
 `;
@@ -32,7 +32,19 @@ const formStyle = css`
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-top: 80px;
+  margin-top: 40px;
+  textarea {
+    background: #e4deca;
+    border-radius: 5px;
+    margin-top: 30px;
+    width: 240px;
+    border: transparent;
+    font-family: Syne;
+    font-size: 14px;
+  }
+  img {
+    border-radius: 50%;
+  }
 `;
 
 const inputFieldStyle = css`
@@ -45,6 +57,32 @@ const inputFieldStyle = css`
   font-family: Syne;
 `;
 
+const uploadStyle = css`
+  line-height: 40px;
+  margin-top: 30px;
+  width: 240px;
+  border: transparent;
+  font-family: Syne;
+
+  ::-webkit-file-upload-button {
+    background: #d7839b;
+    color: white;
+    font-family: Syne;
+    font-size: 14px;
+    border-radius: 50px;
+    outline: none;
+    cursor: pointer;
+    border: transparent;
+  }
+`;
+
+const profilePicStyle = css`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 60px;
+`;
+
 const createAccountButton = css`
   color: white;
   background: #d7839b;
@@ -52,7 +90,7 @@ const createAccountButton = css`
   width: 240px;
   height: 75px;
   border-radius: 38px;
-  margin-top: 50px;
+  margin-top: 30px;
   font-size: 18px;
   font-family: 'Syne', sans-serif;
   border: transparent;
@@ -82,7 +120,7 @@ const errorStyles = css`
 
 const loginSectionStyle = css`
   display: flex;
-  margin-top: 90px;
+  margin-top: 50px;
   gap: 20px;
   p {
     color: #d7839b;
@@ -108,13 +146,36 @@ type Errors = { message: string }[];
 type Props = {
   refreshUserProfile: () => void;
   csrfToken: string;
+  cloudinaryAPI: string;
 };
 
 export default function Register(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [profilePic, setProfilePic] = useState('/profilepic.png');
+  const [bio, setBio] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
   const router = useRouter();
+
+  const uploadImage = async (event: any) => {
+    const files = event.currentTarget.files;
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    formData.append('upload_preset', 'uploads');
+    // setLoading(true);
+
+    const response = await fetch(
+      `	https://api.cloudinary.com/v1_1/${props.cloudinaryAPI}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+    const file = await response.json();
+
+    setProfilePic(file.secure_url);
+    // setLoading(false);
+  };
 
   return (
     <div css={registrationLayout}>
@@ -137,6 +198,8 @@ export default function Register(props: Props) {
                 body: JSON.stringify({
                   username: username,
                   password: password,
+                  image: profilePic,
+                  bio: bio,
                   csrfToken: props.csrfToken,
                 }),
               });
@@ -172,6 +235,25 @@ export default function Register(props: Props) {
               />
             </div>
 
+            <div>
+              <input css={uploadStyle} type="file" onChange={uploadImage} />
+            </div>
+            <div>
+              <img
+                css={profilePicStyle}
+                src={profilePic}
+                alt="user profile pic"
+                style={{ height: '100px', width: '100px' }}
+              />
+            </div>
+            <div>
+              <textarea
+                value={bio}
+                placeholder="add a bio to your profile"
+                onChange={(event) => setBio(event.currentTarget.value)}
+              />
+            </div>
+
             <div css={errorStyles}>
               {errors.map((error) => {
                 return (
@@ -203,7 +285,7 @@ export default function Register(props: Props) {
             alt="models posing with knitwear"
             src="/green.jpg"
             width="564"
-            height="646"
+            height="790"
           />
         </div>
       </div>
@@ -243,11 +325,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
   }
-
+  const cloudinaryAPI = process.env.CLOUDINARY_NAME;
   // 3. Otherwise, generate CSRF token and render the page
   return {
     props: {
       csrfToken: createCsrfToken(),
+      cloudinaryAPI,
     },
   };
 }

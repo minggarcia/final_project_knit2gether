@@ -45,6 +45,8 @@ const sql = connectOneTimeToDatabase();
 export type User = {
   id: number;
   username: string;
+  image: string;
+  bio: string;
 };
 
 export type UserWithPasswordHash = User & {
@@ -84,16 +86,23 @@ export type Comment = {
 
 // CREATE USER
 
-export async function createUser(username: string, passwordHash: string) {
+export async function createUser(
+  username: string,
+  passwordHash: string,
+  image: string,
+  bio: string,
+) {
   const [user] = await sql<[User]>`
 
   INSERT INTO users
-  (username, password_hash)
+  (username, password_hash, image, bio)
   VALUES
-  (${username}, ${passwordHash})
+  (${username}, ${passwordHash}, ${image}, ${bio})
   RETURNING
   id,
-  username`;
+  username,
+  image,
+  bio`;
   return camelCaseKeys(user);
 }
 
@@ -102,7 +111,7 @@ export async function createUser(username: string, passwordHash: string) {
 export async function getUserById(id: number) {
   const [user] = await sql<[User | undefined]>`
   SELECT
-   id, username
+   id, username, image, bio
    FROM
    users
    WHERE
@@ -159,7 +168,9 @@ export async function getUserByValidSessionToken(token: string | undefined) {
   const [user] = await sql<[User | undefined]>`
     SELECT
       users.id,
-      users.username
+      users.username,
+      users.image,
+      users.bio
     FROM
       users,
       sessions
@@ -223,36 +234,36 @@ export async function deleteExpiredSessions() {
 
 // CREATE PROFILE IMAGE AND BIO
 
-export async function createProfileImageAndBio(
-  userId: number,
-  image: string,
-  bio: string,
-) {
-  const [profile] = await sql<[Profile]>`
+// export async function createProfileImageAndBio(
+//   userId: number,
+//   image: string,
+//   bio: string,
+// ) {
+//   const [profile] = await sql<[Profile]>`
 
-  INSERT INTO profile
-  (image, bio, user_id)
-  VALUES
-  (${image}, ${bio}, ${userId})
-  RETURNING
-  image, bio, id`;
+//   INSERT INTO profile
+//   (image, bio, user_id)
+//   VALUES
+//   (${image}, ${bio}, ${userId})
+//   RETURNING
+//   image, bio, id`;
 
-  return camelCaseKeys(profile);
-}
+//   return camelCaseKeys(profile);
+// }
 
-// READ bio and image of profile
+// // READ bio and image of profile
 
-export async function getProfileImageAndBioById(id: number) {
-  const [profile] = await sql<[Profile]>`
-  SELECT
-  id, image, bio
-   FROM
-   profile
-   WHERE
-   id = ${id}`;
+// export async function getProfileImageAndBioById(id: number) {
+//   const [profile] = await sql<[Profile]>`
+//   SELECT
+//   id, image, bio
+//    FROM
+//    profile
+//    WHERE
+//    id = ${id}`;
 
-  return camelCaseKeys(profile);
-}
+//   return camelCaseKeys(profile);
+// }
 
 // CREATE POST
 

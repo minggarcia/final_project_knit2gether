@@ -14,6 +14,8 @@ type RegisterRequestBody = {
   username: string;
   password: string;
   csrfToken: string;
+  image: string;
+  bio: string;
 };
 
 type RegisterNextApiRequest = Omit<NextApiRequest, 'body'> & {
@@ -70,7 +72,12 @@ export default async function registerHandler(
     }
 
     const passwordHash = await bcrypt.hash(request.body.password, 12);
-    const user = await createUser(request.body.username, passwordHash);
+    const user = await createUser(
+      request.body.username,
+      passwordHash,
+      request.body.image,
+      request.body.bio,
+    );
 
     //  RETURN CREATED SESSION IN COOKIE
     // 1. Create a unique token

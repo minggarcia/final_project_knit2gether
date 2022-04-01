@@ -134,7 +134,11 @@ export default function UserProfile(props: Props) {
         </Head>
 
         <div css={descriptionSectionStyle}>
-          <Image src="/profilepic.png" width="300px" height="300px" />
+          <img
+            src={props.user.image}
+            alt="profile pic"
+            style={{ height: '100px', width: '100px' }}
+          />
           <div css={descriptionContentStyle}>
             <div>
               Profile of{' '}
@@ -142,6 +146,7 @@ export default function UserProfile(props: Props) {
                 <span>{props.user.username}</span>
               </div>
               <div>bio</div>
+              <div>{props.user.bio}</div>
               <div>
                 <textarea />
               </div>
