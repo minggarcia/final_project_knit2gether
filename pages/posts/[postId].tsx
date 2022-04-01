@@ -64,6 +64,26 @@ const commentSectionStyle = css`
   }
 `;
 
+const commentBlockStyle = css`
+  font-weight: normal;
+  margin-top: 20px;
+  padding: 30px;
+  display: flex;
+  p {
+    font-weight: bold;
+    margin-left: 20px;
+  }
+  span {
+    color: #d7839b;
+    font-weight: normal;
+  }
+`;
+
+const trashcanStyle = css`
+  display: flex;
+  justify-content: right;
+`;
+
 const commentImageStyle = css`
   border-radius: 50%;
   width: 50px;
@@ -148,13 +168,6 @@ type Props = {
 export default function SinglePost(props: Props) {
   const [commentFromUser, setCommentFromUser] = useState<string>('');
   const [newComment, setNewComment] = useState(props.postComments);
-
-  // state variables for editing inputs
-  // const [newTitle, setNewTitle] = useState('');
-  // const [newDescription, setNewDescription] = useState('');
-  // const [newNeedleSize, setNewNeedleSize] = useState('');
-  // const [newYarnName, setNewYarnName] = useState('');
-
   const router = useRouter();
 
   async function deletePostByPostId(id: number) {
@@ -174,25 +187,23 @@ export default function SinglePost(props: Props) {
     return deleteResponse;
   }
 
-  // async function updatePostById(id: number) {
-  //   const updateResponse = await fetch(`/api/posts/${id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       post: {
-  //         title: newTitle,
-  //         description: newDescription,
-  //         needleSize: newNeedleSize,
-  //         yarnName: newYarnName,
-  //       },
-  //     }),
-  //   });
-  //   const updateResponseBody =
-  //     (await updateResponse.json()) as PostResponseBody;
-  //   console.log(updateResponseBody);
-  // }
+  const deleteComment = async (id: number) => {
+    const response = await fetch(`/api/comments`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: id,
+      }),
+    });
+    const newResponse = await response.json();
+    console.log('newResponse', newResponse.deletedComment);
+    const newCommentList = newComment.filter((comment) => {
+      return newResponse.deletedComment.id !== comment.id;
+    });
+    setNewComment(newCommentList);
+  };
 
   return (
     <div>
@@ -249,7 +260,10 @@ export default function SinglePost(props: Props) {
                   console.log('commentResponseBody', commentResponseBody);
                   setCommentFromUser('');
 
-                  const newCommentsList = [...newComment, commentResponseBody];
+                  const newCommentsList = [
+                    ...newComment,
+                    commentResponseBody.comment,
+                  ];
                   setNewComment(newCommentsList);
 
                   return;
@@ -273,9 +287,26 @@ export default function SinglePost(props: Props) {
               ) : (
                 newComment.map((e) => {
                   return (
-                    <div key={e.comment}>
+                    <div css={commentBlockStyle} key={e.comment}>
                       <img src={e.image} css={commentImageStyle} alt="user" />
-                      {e.username}: {e.comment}
+                      <p>
+                        {' '}
+                        {e.username}: <span>{e.comment}</span>
+                      </p>
+                      {props.userId === props.post.userId && (
+                        <button
+                          onClick={() => {
+                            deleteComment(e.id).catch(() => {});
+                          }}
+                        >
+                          <Image
+                            css={trashcanStyle}
+                            src="/delete.png"
+                            width="20px"
+                            height="20px"
+                          />
+                        </button>
+                      )}
                     </div>
                   );
                 })
