@@ -41,28 +41,20 @@ const descriptionSectionStyle = css`
     color: #779677;
     font-weight: normal;
   }
+  img {
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 const descriptionContentStyle = css`
   display: flex;
-  flex-direction: row;
-  margin-top: 80px;
+  /* flex-direction: row; */
+
   font-weight: bold;
   line-height: 40px;
-
-  textarea {
-    background: transparent;
-    border: transparent;
-    color: #779677;
-    font-family: Syne;
-    border-radius: 10px;
-    width: 300px;
-    height: 100px;
-    :hover {
-      border: 2px solid#779677;
-      border-radius: 10px;
-    }
-  }
+  padding: 20px;
 `;
 
 const uploadButtonStyle = css`
@@ -134,11 +126,9 @@ export default function UserProfile(props: Props) {
         </Head>
 
         <div css={descriptionSectionStyle}>
-          <img
-            src={props.user.image}
-            alt="profile pic"
-            style={{ height: '100px', width: '100px' }}
-          />
+          <div>
+            <img src={props.user.image} alt="profile pic" />
+          </div>
           <div css={descriptionContentStyle}>
             <div>
               Profile of{' '}
@@ -146,10 +136,7 @@ export default function UserProfile(props: Props) {
                 <span>{props.user.username}</span>
               </div>
               <div>bio</div>
-              <div>{props.user.bio}</div>
-              <div>
-                <textarea />
-              </div>
+              <span>{props.user.bio}</span>
             </div>
           </div>
           <div css={uploadButtonStyle}>

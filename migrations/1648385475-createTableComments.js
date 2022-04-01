@@ -5,7 +5,8 @@ exports.up = async (sql) => {
       user_id integer REFERENCES users (id) ON DELETE CASCADE,
       post_id integer REFERENCES posts (id) ON DELETE CASCADE,
       comment varchar(100),
-      username varchar(30) REFERENCES users(username) ON DELETE CASCADE
+      username varchar(30) REFERENCES users(username) ON DELETE CASCADE,
+      image varchar (200) REFERENCES users(image) ON DELETE CASCADE
     );
   `;
 };

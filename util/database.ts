@@ -325,22 +325,6 @@ export async function getPostsByUserId(userId: number) {
   });
 }
 
-// export async function getUsernameByPostId(postId: number) {
-//   const [user] = await sql<[User]>`
-// SELECT
-// users.id,
-// users.username
-// FROM
-//   users,
-//   posts
-// WHERE
-// post_id = ${postId} AND
-//  posts.user_id = users.id AND
-//  posts.user.username = users.username
-//   `;
-//   return user;
-// }
-
 // UPDATE POST
 
 export async function updatePostById(
