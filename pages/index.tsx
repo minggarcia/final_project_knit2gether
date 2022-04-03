@@ -96,7 +96,9 @@ export default function Home(props: Props) {
                           width="300px"
                           height="300px"
                         />
-                        <p>{post.title}</p>
+                        <p>
+                          {post.title} by {post.username}
+                        </p>
                       </a>
                     </Link>
                   </div>

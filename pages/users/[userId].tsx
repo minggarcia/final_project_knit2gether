@@ -113,6 +113,7 @@ export default function UserProfile(props: Props) {
           <div>
             <img src={props.user.image} alt="profile pic" />
           </div>
+
           <div css={descriptionContentStyle}>
             <div>
               Profile of{' '}
@@ -123,6 +124,7 @@ export default function UserProfile(props: Props) {
               <span>{props.user.bio}</span>
             </div>
           </div>
+
           <div css={uploadButtonStyle}>
             {props.userId === props.user.id && (
               <Link href="/upload">

@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { User } from '../../util/database';
 
@@ -44,7 +45,7 @@ export default function Header(props: Props) {
     <header>
       <div css={headerStyle}>
         <Link href="/">
-          <a>knit2gether</a>
+          <a>knit2gether </a>
         </Link>
         <Link href={`/users/${props.userObject?.id}`}>
           <a>
