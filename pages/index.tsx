@@ -17,13 +17,13 @@ const imageStyle = css`
   justify-content: center;
 `;
 
-// const h1Style = css`
-//   margin-top: 30px;
-//   justify-content: center;
-//   display: flex;
-//   color: #d7839b;
-//   gap: 40px;
-// `;
+const h1Style = css`
+  margin-top: 30px;
+  justify-content: center;
+  display: flex;
+  color: #d7839b;
+  gap: 40px;
+`;
 const h2Style = css`
   margin-top: 100px;
   text-align: center;
@@ -66,10 +66,10 @@ export default function Home(props: Props) {
           <meta name="Homepage" content="Homepage" />
         </Head>
         <div css={homepageStyle}>
-          {/* <div css={h1Style}>
+          <div css={h1Style}>
             <h1>Welcome to knit2gether</h1>
             <Image src="/logo-pink.png" width="80px" height="30px" />
-          </div> */}
+          </div>
 
           <div css={imageSectionStyle}>
             <Image
