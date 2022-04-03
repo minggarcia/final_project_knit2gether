@@ -182,7 +182,7 @@ export default function SinglePost(props: Props) {
     });
 
     props.refreshUserProfile();
-    await router.push('/');
+    await router.push(`/users/${props.userId}`);
 
     return deleteResponse;
   }
