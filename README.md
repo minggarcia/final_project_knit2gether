@@ -1,34 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## knit2gether - a social media platform for knitting enthusiasts 
+A web app for uploading pictures of knits where you can add a title, description, the needle size and also the yarn name of the project you want to share with the community. Users can interact with each other using the love letter (aka comment) section within the post that was uploaded. 
 
-## Getting Started
+## technologies
+- Next.js
+- emotion/css
+- Javascript / Typescript
+- PostgreSQL
+- ley
+- dotenv-safe
+- bcrypt
+- Cloudinary
+- Figma (https://www.figma.com/file/HuH2aQVZGTcuQv8CGW0Yon/FinalProject?node-id=0%3A1)
+- draw sql
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## set up
+Clone the repo from GitHub and then install the dependencies:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+`git clone https://github.com/minggarcia/final_project_knit2gether
+cd final_project_knit2gether
+yarn`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Setup a database with postgres on your computer:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`psql <login>
+CREATE DATABASE <database name>;
+CREATE USER <username> WITH ENCRYPTED PASSWORD '<pw>';
+GRANT ALL PRIVILEGES ON DATABASE <database name> TO <user name>;`
 
-## Learn More
+Create a .env file with the userinfo for the database and create .env.example as a template file for userinfo
 
-To learn more about Next.js, take a look at the following resources:
+Use migrations:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`yarn migrate up
+`
+To delete data from database run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+ `yarn migrate down`
+ 
+ To run the development server:
+  `yarn dev`
+  
+  Open http://localhost:3000 with your browser to see the result.
+  
+  ## deployment
+  To deploy this project, create a Heroku Account and follow the instructions
+  
+  ## database schema 
+  <img width="785" alt="image" src="https://user-images.githubusercontent.com/94932856/161445254-3132c4b2-081c-4d73-91f7-cb795c22b4c2.png">
+  
+  ## preview
+  ![Screenshot 2022-04-03 at 21 45 49](https://user-images.githubusercontent.com/94932856/161445469-433f4688-b34c-44d0-9f01-7a48ce6d92c4.png)
+![Screenshot 2022-04-03 at 21 46 59](https://user-images.githubusercontent.com/94932856/161445473-7494ae9c-cdea-4ebc-8a1b-86198208fcc5.png)
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
