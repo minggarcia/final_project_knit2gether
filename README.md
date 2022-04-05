@@ -33,8 +33,8 @@ Create a .env file with the userinfo for the database and create .env.example as
 
 Use migrations:
 
-`yarn migrate up
-`
+`yarn migrate up`
+
 To delete data from database run:
 
  `yarn migrate down`
